@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 // DEFAULT_TTL is the default amount of time which a cookie is considered valid.

@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 type Permissions interface {

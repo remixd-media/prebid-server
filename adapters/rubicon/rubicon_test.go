@@ -11,19 +11,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/prebid/prebid-server/adapters/adapterstest"
-	"github.com/prebid/prebid-server/cache/dummycache"
-	"github.com/prebid/prebid-server/pbs"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/adapters/adapterstest"
+	"github.com/remixd-media/prebid-server/cache/dummycache"
+	"github.com/remixd-media/prebid-server/pbs"
+	"github.com/remixd-media/prebid-server/usersync"
 
 	"fmt"
 
 	"strings"
 
 	"github.com/mxmCherry/openrtb"
-	"github.com/prebid/prebid-server/adapters"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/adapters"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 type rubiAppendTrackerUrlTestScenario struct {

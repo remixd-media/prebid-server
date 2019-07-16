@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang/glog"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 	metrics "github.com/rcrowley/go-metrics"
 )
 

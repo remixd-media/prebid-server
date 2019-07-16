@@ -14,19 +14,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/prebid/prebid-server/stored_requests"
+	"github.com/remixd-media/prebid-server/stored_requests"
 	metrics "github.com/rcrowley/go-metrics"
 
 	"github.com/buger/jsonparser"
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/mxmCherry/openrtb"
-	analyticsConf "github.com/prebid/prebid-server/analytics/config"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/errortypes"
-	"github.com/prebid/prebid-server/exchange"
-	"github.com/prebid/prebid-server/openrtb_ext"
-	"github.com/prebid/prebid-server/pbsmetrics"
-	"github.com/prebid/prebid-server/stored_requests/backends/empty_fetcher"
+	analyticsConf "github.com/remixd-media/prebid-server/analytics/config"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/errortypes"
+	"github.com/remixd-media/prebid-server/exchange"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
+	"github.com/remixd-media/prebid-server/stored_requests/backends/empty_fetcher"
 	"github.com/stretchr/testify/assert"
 )
 

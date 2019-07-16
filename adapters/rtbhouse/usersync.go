@@ -3,8 +3,8 @@ package rtbhouse
 import (
 	"text/template"
 
-	"github.com/prebid/prebid-server/adapters"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/adapters"
+	"github.com/remixd-media/prebid-server/usersync"
 )
 
 const rtbHouseGDPRVendorID = uint16(16)

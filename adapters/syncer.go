@@ -3,9 +3,9 @@ package adapters
 import (
 	"text/template"
 
-	"github.com/prebid/prebid-server/macros"
-	"github.com/prebid/prebid-server/openrtb_ext"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/macros"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/usersync"
 )
 
 func GDPRAwareSyncerIDs(syncers map[openrtb_ext.BidderName]usersync.Usersyncer) map[openrtb_ext.BidderName]uint16 {

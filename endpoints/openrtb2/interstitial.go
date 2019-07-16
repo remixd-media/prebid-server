@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/mxmCherry/openrtb"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/errortypes"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/errortypes"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 func processInterstitials(req *openrtb.BidRequest) error {

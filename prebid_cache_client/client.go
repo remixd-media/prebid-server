@@ -11,7 +11,7 @@ import (
 
 	"github.com/buger/jsonparser"
 	"github.com/golang/glog"
-	"github.com/prebid/prebid-server/config"
+	"github.com/remixd-media/prebid-server/config"
 	"golang.org/x/net/context/ctxhttp"
 )
 

@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/usersync"
 
 	"encoding/json"
 )

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"net/http/pprof"
 
-	"github.com/prebid/prebid-server/currencies"
-	"github.com/prebid/prebid-server/endpoints"
+	"github.com/remixd-media/prebid-server/currencies"
+	"github.com/remixd-media/prebid-server/endpoints"
 )
 
 func Admin(revision string, rateConverter *currencies.RateConverter) *http.ServeMux {

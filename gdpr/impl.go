@@ -6,12 +6,12 @@ import (
 	"github.com/prebid/go-gdpr/consentconstants"
 	"github.com/prebid/go-gdpr/vendorconsent"
 	"github.com/prebid/go-gdpr/vendorlist"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 // This file implements GDPR permissions for the app.
-// For more info, see https://github.com/prebid/prebid-server/issues/501
+// For more info, see https://github.com/remixd-media/prebid-server/issues/501
 //
 // Nothing in this file is exported. Public APIs can be found in gdpr.go
 

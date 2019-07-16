@@ -11,15 +11,15 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/prebid/prebid-server/stored_requests"
-	"github.com/prebid/prebid-server/stored_requests/backends/empty_fetcher"
+	"github.com/remixd-media/prebid-server/stored_requests"
+	"github.com/remixd-media/prebid-server/stored_requests/backends/empty_fetcher"
 
 	"github.com/mxmCherry/openrtb"
-	analyticsConf "github.com/prebid/prebid-server/analytics/config"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/exchange"
-	"github.com/prebid/prebid-server/openrtb_ext"
-	"github.com/prebid/prebid-server/pbsmetrics"
+	analyticsConf "github.com/remixd-media/prebid-server/analytics/config"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/exchange"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
 	metrics "github.com/rcrowley/go-metrics"
 	"github.com/stretchr/testify/assert"
 )

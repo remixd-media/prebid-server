@@ -8,9 +8,10 @@ import (
 
 	"github.com/buger/jsonparser"
 	"github.com/mxmCherry/openrtb"
-	"github.com/prebid/prebid-server/gdpr"
-	"github.com/prebid/prebid-server/openrtb_ext"
-	"github.com/prebid/prebid-server/pbsmetrics"
+	"github.com/remixd-media/prebid-server/gdpr"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
+	"github.com/remixd-media/prebid-server/remixd"
 )
 
 // cleanOpenRTBRequests splits the input request into requests which are sanitized for each bidder. Intended behavior is:
@@ -26,7 +27,7 @@ func cleanOpenRTBRequests(ctx context.Context,
 	gDPR gdpr.Permissions,
 	usersyncIfAmbiguous bool) (requestsByBidder map[openrtb_ext.BidderName]*openrtb.BidRequest, aliases map[string]string, errs []error) {
 
-	impsByBidder, errs := splitImps(orig.Imp)
+	impsByBidder, errs := splitImps(orig)
 	if len(errs) > 0 {
 		return
 	}
@@ -128,8 +129,9 @@ func extractBuyerUIDs(user *openrtb.User) (map[string]string, error) {
 // The "imp.ext" value of the rubicon Imp will only contain the "prebid" values, and "rubicon" value at the "bidder" key.
 //
 // The goal here is so that Bidders only get Imps and Imp.Ext values which are intended for them.
-func splitImps(imps []openrtb.Imp) (map[string][]openrtb.Imp, []error) {
-	impExts, err := parseImpExts(imps)
+func splitImps(orig *openrtb.BidRequest) (map[string][]openrtb.Imp, []error) {
+	imps := orig.Imp
+	impExts, err := remixd.ParseImpExts(orig)
 	if err != nil {
 		return nil, []error{err}
 	}

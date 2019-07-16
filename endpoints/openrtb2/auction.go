@@ -20,16 +20,16 @@ import (
 	"github.com/mxmCherry/openrtb"
 	"github.com/mxmCherry/openrtb/native"
 	nativeRequests "github.com/mxmCherry/openrtb/native/request"
-	"github.com/prebid/prebid-server/analytics"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/errortypes"
-	"github.com/prebid/prebid-server/exchange"
-	"github.com/prebid/prebid-server/openrtb_ext"
-	"github.com/prebid/prebid-server/pbsmetrics"
-	"github.com/prebid/prebid-server/prebid"
-	"github.com/prebid/prebid-server/stored_requests"
-	"github.com/prebid/prebid-server/stored_requests/backends/empty_fetcher"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/analytics"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/errortypes"
+	"github.com/remixd-media/prebid-server/exchange"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
+	"github.com/remixd-media/prebid-server/prebid"
+	"github.com/remixd-media/prebid-server/stored_requests"
+	"github.com/remixd-media/prebid-server/stored_requests/backends/empty_fetcher"
+	"github.com/remixd-media/prebid-server/usersync"
 	"golang.org/x/net/publicsuffix"
 )
 
@@ -365,10 +365,10 @@ func (deps *endpointDeps) validateImp(imp *openrtb.Imp, aliases map[string]strin
 		return []error{err}
 	}
 
-	errL := deps.validateImpExt(imp, aliases, index)
+	/*errL := deps.validateImpExt(imp, aliases, index)
 	if len(errL) != 0 {
 		return errL
-	}
+	}*/
 
 	return nil
 }
@@ -688,7 +688,7 @@ func (deps *endpointDeps) validateImpExt(imp *openrtb.Imp, aliases map[string]st
 	// NOTE: This is not part of the official API, we are not expecting clients
 	// migrate from imp[...].ext.${BIDDER} to imp[...].ext.prebid.bidder.${BIDDER}
 	// at this time
-	// https://github.com/prebid/prebid-server/pull/846#issuecomment-476352224
+	// https://github.com/remixd-media/prebid-server/pull/846#issuecomment-476352224
 	if rawPrebidExt, ok := bidderExts[openrtb_ext.PrebidExtKey]; ok {
 		var prebidExt openrtb_ext.ExtImpPrebid
 		if err := json.Unmarshal(rawPrebidExt, &prebidExt); err == nil && prebidExt.Bidder != nil {

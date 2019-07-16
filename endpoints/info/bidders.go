@@ -7,8 +7,8 @@ import (
 	"github.com/buger/jsonparser"
 	"github.com/golang/glog"
 	"github.com/julienschmidt/httprouter"
-	"github.com/prebid/prebid-server/adapters"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/adapters"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 // NewBiddersEndpoint implements /info/bidders

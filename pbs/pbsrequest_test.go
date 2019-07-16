@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/magiconair/properties/assert"
-	"github.com/prebid/prebid-server/cache/dummycache"
-	"github.com/prebid/prebid-server/config"
+	"github.com/remixd-media/prebid-server/cache/dummycache"
+	"github.com/remixd-media/prebid-server/config"
 )
 
 const mimeVideoMp4 = "video/mp4"

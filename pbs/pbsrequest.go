@@ -10,11 +10,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/prebid/prebid-server/cache"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/prebid"
-	"github.com/prebid/prebid-server/stored_requests"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/cache"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/prebid"
+	"github.com/remixd-media/prebid-server/stored_requests"
+	"github.com/remixd-media/prebid-server/usersync"
 
 	"github.com/blang/semver"
 	"github.com/buger/jsonparser"

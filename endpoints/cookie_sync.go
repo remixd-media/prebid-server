@@ -13,12 +13,12 @@ import (
 	"github.com/buger/jsonparser"
 	"github.com/golang/glog"
 	"github.com/julienschmidt/httprouter"
-	"github.com/prebid/prebid-server/analytics"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/gdpr"
-	"github.com/prebid/prebid-server/openrtb_ext"
-	"github.com/prebid/prebid-server/pbsmetrics"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/analytics"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/gdpr"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
+	"github.com/remixd-media/prebid-server/usersync"
 )
 
 func NewCookieSyncEndpoint(syncers map[openrtb_ext.BidderName]usersync.Usersyncer, cfg *config.Configuration, syncPermissions gdpr.Permissions, metrics pbsmetrics.MetricsEngine, pbsAnalytics analytics.PBSAnalyticsModule) httprouter.Handle {

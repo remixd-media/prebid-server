@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/mxmCherry/openrtb"
-	"github.com/prebid/prebid-server/adapters"
-	"github.com/prebid/prebid-server/currencies"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/adapters"
+	"github.com/remixd-media/prebid-server/currencies"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 	"github.com/stretchr/testify/assert"
 )
 

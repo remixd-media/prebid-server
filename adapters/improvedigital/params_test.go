@@ -2,7 +2,7 @@ package improvedigital
 
 import (
 	"encoding/json"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 	"testing"
 )
 

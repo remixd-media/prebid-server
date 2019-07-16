@@ -11,11 +11,11 @@ import (
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
 	"github.com/julienschmidt/httprouter"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/stored_requests/backends/empty_fetcher"
-	"github.com/prebid/prebid-server/stored_requests/backends/http_fetcher"
-	"github.com/prebid/prebid-server/stored_requests/events"
-	httpEvents "github.com/prebid/prebid-server/stored_requests/events/http"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/stored_requests/backends/empty_fetcher"
+	"github.com/remixd-media/prebid-server/stored_requests/backends/http_fetcher"
+	"github.com/remixd-media/prebid-server/stored_requests/events"
+	httpEvents "github.com/remixd-media/prebid-server/stored_requests/events/http"
 )
 
 func TestNewEmptyFetcher(t *testing.T) {

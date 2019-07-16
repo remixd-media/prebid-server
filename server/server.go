@@ -13,9 +13,9 @@ import (
 
 	"github.com/NYTimes/gziphandler"
 	"github.com/golang/glog"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/pbsmetrics"
-	metricsconfig "github.com/prebid/prebid-server/pbsmetrics/config"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
+	metricsconfig "github.com/remixd-media/prebid-server/pbsmetrics/config"
 )
 
 // Listen blocks forever, serving PBS requests on the given port. This will block forever, until the process is shut down.

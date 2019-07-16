@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/prebid/prebid-server/stored_requests/events"
+	"github.com/remixd-media/prebid-server/stored_requests/events"
 )
 
 type eventsAPI struct {

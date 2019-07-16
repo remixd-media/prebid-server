@@ -2,9 +2,9 @@ package config
 
 import (
 	"github.com/golang/glog"
-	"github.com/prebid/prebid-server/analytics"
-	"github.com/prebid/prebid-server/analytics/filesystem"
-	"github.com/prebid/prebid-server/config"
+	"github.com/remixd-media/prebid-server/analytics"
+	"github.com/remixd-media/prebid-server/analytics/filesystem"
+	"github.com/remixd-media/prebid-server/config"
 )
 
 //Modules that need to be logged to need to be initialized here

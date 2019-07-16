@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 
 	"github.com/golang/glog"
-	"github.com/prebid/prebid-server/cache"
+	"github.com/remixd-media/prebid-server/cache"
 	"gopkg.in/yaml.v2"
 )
 

@@ -11,14 +11,14 @@ import (
 
 	"github.com/golang/glog"
 
-	"github.com/prebid/prebid-server/pbs"
+	"github.com/remixd-media/prebid-server/pbs"
 
 	"golang.org/x/net/context/ctxhttp"
 
 	"github.com/mxmCherry/openrtb"
-	"github.com/prebid/prebid-server/adapters"
-	"github.com/prebid/prebid-server/errortypes"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/adapters"
+	"github.com/remixd-media/prebid-server/errortypes"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 type RubiconAdapter struct {

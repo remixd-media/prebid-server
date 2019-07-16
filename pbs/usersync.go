@@ -11,11 +11,11 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/julienschmidt/httprouter"
-	"github.com/prebid/prebid-server/analytics"
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/pbsmetrics"
-	"github.com/prebid/prebid-server/ssl"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/analytics"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
+	"github.com/remixd-media/prebid-server/ssl"
+	"github.com/remixd-media/prebid-server/usersync"
 )
 
 // Recaptcha code from https://github.com/haisum/recaptcha/blob/master/recaptcha.go

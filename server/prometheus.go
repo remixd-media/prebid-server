@@ -7,9 +7,9 @@ import (
 	"github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/prebid/prebid-server/config"
-	metricsconfig "github.com/prebid/prebid-server/pbsmetrics/config"
-	prometheusMetrics "github.com/prebid/prebid-server/pbsmetrics/prometheus"
+	"github.com/remixd-media/prebid-server/config"
+	metricsconfig "github.com/remixd-media/prebid-server/pbsmetrics/config"
+	prometheusMetrics "github.com/remixd-media/prebid-server/pbsmetrics/prometheus"
 )
 
 func newPrometheusServer(cfg *config.Configuration, metrics *metricsconfig.DetailedMetricsEngine) *http.Server {

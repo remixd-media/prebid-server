@@ -8,16 +8,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/prebid/prebid-server/currencies"
+	"github.com/remixd-media/prebid-server/currencies"
 
-	"github.com/prebid/prebid-server/gdpr"
+	"github.com/remixd-media/prebid-server/gdpr"
 
-	"github.com/prebid/prebid-server/pbsmetrics"
-	metricsConf "github.com/prebid/prebid-server/pbsmetrics/config"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
+	metricsConf "github.com/remixd-media/prebid-server/pbsmetrics/config"
 
 	"github.com/mxmCherry/openrtb"
-	"github.com/prebid/prebid-server/adapters"
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/adapters"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 )
 
 // Using this set of bids in more than one test

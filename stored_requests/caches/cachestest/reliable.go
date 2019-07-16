@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/prebid/prebid-server/stored_requests"
+	"github.com/remixd-media/prebid-server/stored_requests"
 )
 
 const (

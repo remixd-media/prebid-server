@@ -3,9 +3,9 @@ package prometheusmetrics
 import (
 	"time"
 
-	"github.com/prebid/prebid-server/config"
-	"github.com/prebid/prebid-server/openrtb_ext"
-	"github.com/prebid/prebid-server/pbsmetrics"
+	"github.com/remixd-media/prebid-server/config"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/pbsmetrics"
 	"github.com/prometheus/client_golang/prometheus"
 	_ "github.com/prometheus/client_golang/prometheus/promhttp"
 )

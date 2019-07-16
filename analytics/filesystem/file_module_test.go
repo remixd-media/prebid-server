@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/mxmCherry/openrtb"
-	"github.com/prebid/prebid-server/analytics"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/analytics"
+	"github.com/remixd-media/prebid-server/usersync"
 )
 
 const TEST_DIR string = "testFiles"

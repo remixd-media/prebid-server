@@ -3,8 +3,8 @@ package adkernelAdn
 import (
 	"text/template"
 
-	"github.com/prebid/prebid-server/adapters"
-	"github.com/prebid/prebid-server/usersync"
+	"github.com/remixd-media/prebid-server/adapters"
+	"github.com/remixd-media/prebid-server/usersync"
 )
 
 const adkernelGDPRVendorID = uint16(14)

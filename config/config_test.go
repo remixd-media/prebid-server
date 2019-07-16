@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/prebid/prebid-server/openrtb_ext"
+	"github.com/remixd-media/prebid-server/openrtb_ext"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
