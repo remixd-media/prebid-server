@@ -39,3 +39,4 @@ build: test
 # image will build a docker image
 image: build
 	docker build -t prebid-server .
+
