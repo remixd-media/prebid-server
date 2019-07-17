@@ -27,6 +27,7 @@ import (
 	"github.com/remixd-media/prebid-server/openrtb_ext"
 	"github.com/remixd-media/prebid-server/pbsmetrics"
 	"github.com/remixd-media/prebid-server/prebid"
+	"github.com/remixd-media/prebid-server/remixd"
 	"github.com/remixd-media/prebid-server/stored_requests"
 	"github.com/remixd-media/prebid-server/stored_requests/backends/empty_fetcher"
 	"github.com/remixd-media/prebid-server/usersync"
@@ -151,6 +152,8 @@ func (deps *endpointDeps) Auction(w http.ResponseWriter, r *http.Request, _ http
 		ao.Errors = append(ao.Errors, err)
 		return
 	}
+
+	remixd.SelectWinningBids(req, response)
 
 	// Fixes #231
 	enc := json.NewEncoder(w)

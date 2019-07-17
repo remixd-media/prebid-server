@@ -1,7 +1,11 @@
 package handlers
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
+	"math"
 	"net/http"
 	"os"
 	"time"
@@ -23,12 +27,17 @@ func genID() (string, error) {
 func (app *App) AuctionHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("[%v] New Auction Request\n", time.Now())
 
+	b := bytes.Buffer{}
+	tr := io.TeeReader(r.Body, &b)
+
 	bidRequest := &openrtb.BidRequest{}
-	err := readJSON(r, bidRequest)
+	err := json.NewDecoder(tr).Decode(bidRequest)
 	if err != nil {
 		JSONError(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	fmt.Printf("bidRequest: %v\n", b.String())
 
 	bidResponse := &openrtb.BidResponse{}
 	bidResponse.ID = bidRequest.ID
@@ -55,9 +64,30 @@ func (app *App) AuctionHandler(w http.ResponseWriter, r *http.Request) {
 		bid.ID = impBidID
 
 		bid.ImpID = imp.ID
-		bid.Price = imp.BidFloor * 1.1
+		bid.Price = math.Round(imp.BidFloor*(1+app.Rand.Float64())*100) / 100
 		bid.NURL = fmt.Sprintf("http://localhost:%s/winnotice?impbidid=%s", os.Getenv("PORT"), impBidID)
 		bid.CrID = "creative-1"
+
+		var impExt map[string]interface{}
+		err = json.Unmarshal(imp.Ext, &impExt)
+		if err != nil {
+			JSONError(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if _, ok := impExt["appnexus"]; ok {
+			bid.Ext = json.RawMessage(`{
+				"appnexus": {
+				  "brand_id": 1,
+				  "brand_category_id": 1,
+				  "auction_id": 8189378542222915032,
+				  "bid_ad_type": 0,
+				  "bidder_id": 2,
+				  "ranking_price": 0.000000
+				}
+			  }`)
+		} else if _, ok := impExt["pubmatic"]; ok {
+		}
 
 		seatBid.Bid = append(seatBid.Bid, bid)
 	}

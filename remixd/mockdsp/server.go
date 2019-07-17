@@ -2,8 +2,10 @@ package mockdsp
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/remixd-media/prebid-server/remixd/mockdsp/handlers"
 )
@@ -14,7 +16,11 @@ func StartServer() error {
 		port = "8100"
 	}
 
-	app := &handlers.App{}
+	var rand = rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	app := &handlers.App{
+		Rand: rand,
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/openrtb2/auction", app.AuctionHandler)

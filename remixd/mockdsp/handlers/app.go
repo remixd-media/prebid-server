@@ -3,10 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 )
 
 type App struct {
+	Rand *rand.Rand
 }
 
 // json helpers
