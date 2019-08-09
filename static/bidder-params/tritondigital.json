@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TritonDigital Adapter Params",
+  "description": "A schema which validates params accepted by the TritonDigital adapter",
+  "type": "object",
+  "properties": {
+    "stid": {
+      "type": ["string"],
+      "description": "Station ID."
+    },
+    "banners": {
+      "type": ["string"],
+      "description": "comma-separated list of supported banner capabilities."
+    }
+  },
+  "required": ["stid","banners"]
+}
