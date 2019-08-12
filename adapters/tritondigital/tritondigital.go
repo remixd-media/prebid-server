@@ -68,7 +68,17 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			params.Add("iab-categories-to-exclude", strings.Join(request.BCat, ","))
 		}
 
+		if request.Site != nil {
+			if request.Site.Ref != "" {
+				params.Add("referrer", request.Site.Ref)
+			}
+		}
+
 		if request.User != nil {
+			if request.User.BuyerUID != "" {
+				params.Add("lsid", request.User.BuyerUID)
+			}
+
 			if request.User.Yob > 0 {
 				params.Add("yob", fmt.Sprintf("%d", request.User.Yob))
 			}
@@ -95,6 +105,15 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			}
 		}
 
+		if request.Device != nil {
+			if request.Device.UA != "" {
+				params.Add("ua", request.Device.UA)
+			}
+			if request.Device.IP != "" {
+				params.Add("ip", request.Device.IP)
+			}
+		}
+
 		params.Add("at", "audio")
 		params.Add("fmt", "vast")
 		params.Add("banners", impExt.Banners)
@@ -103,10 +122,6 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		headers := http.Header{}
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
-
-		if request.Device != nil && request.Device.UA != "" {
-			headers.Set("User-Agent", request.Device.UA)
-		}
 
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
