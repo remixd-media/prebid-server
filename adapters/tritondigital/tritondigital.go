@@ -201,7 +201,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 		Bid: &openrtb.Bid{
 			ID:    vast.Ads[0].ID,
 			ImpID: externalRequest.Headers.Get("PBS-IMP-ID"),
-			Price: 1.00,
+			Price: 4.00,
 			AdM:   string(response.Body),
 			CrID:  vast.Ads[0].ID,
 		},
