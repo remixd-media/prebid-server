@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "AdsWizz Adapter Params",
+    "description": "A schema which validates params accepted by the AdsWizz adapter",
+    "type": "object",
+    "properties": {
+      "alias": {
+        "type": ["string"],
+        "description": "Audio Zone Alias."
+      }
+    },
+    "required": ["alias"]
+  }
+  

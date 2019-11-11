@@ -7,7 +7,7 @@
       "IAB8-18"
     ],
     "user": {
-      "buyeruid": "trit-101",
+      "buyeruid": "user-101",
       "yob": 1973
     },
     "device": {
@@ -51,17 +51,20 @@
           }
         }
       }
-    ]
+    ],
+    "site": {
+      "page": "http://example.com/page-1"
+    }
   },
   "httpCalls": [
     {
       "expectedRequest": {
         "method": "GET",
-        "uri": "https://tritondigitalmock.example.com/ondemand/ars?at=audio&banners=300x250&fmt=vast&iab-categories-to-exclude=IAB25%2CIAB7-39%2CIAB8-18&lsid=trit-101&maxbr=1500&maxdur=30&minbr=300&mindur=5&stid=12345&type=preroll&ua=my-user-agent&version=1.6.9&yob=1973"
+        "uri": "https://tritondigitalmock.example.com/ondemand/ars?at=audio&banners=300x250&fmt=vast&iab-categories-to-exclude=IAB25%2CIAB7-39%2CIAB8-18&lsid=user-101&maxbr=1500&maxdur=30&minbr=300&mindur=5&referrer=http%3A%2F%2Fexample.com%2Fpage-1&stid=12345&type=preroll&ua=my-user-agent&version=1.6.9&yob=1973"
       },
       "mockResponse": {
         "status": 200,
-        "body": "<?xml version='1.0' encoding='UTF-8' ?><VAST version='2.0.1'> <Ad id='Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA'> <InLine> <AdSystem><![CDATA[ARSPY]]></AdSystem> <AdTitle><![CDATA[Triton Digital a2x]]></AdTitle> <Impression id='ImpressionConfirmationURL'><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/1?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>        <Impression><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/2?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression> <Impression><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/3?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>     <Impression><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/4?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>  </InLine> </Ad></VAST>"
+        "body": "<?xml version='1.0' encoding='UTF-8' ?><VAST version='2.0.1'> <Ad id='Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA'> <InLine> <AdSystem><![CDATA[ARSPY]]></AdSystem> <AdTitle><![CDATA[Triton Digital a2x]]></AdTitle> <Impression id='ImpressionConfirmationURL'><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/1?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>        <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/2?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression> <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/3?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>     <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/4?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>  </InLine> </Ad></VAST>"
       }
     }
   ],
@@ -72,8 +75,8 @@
         {
           "bid": {
             "crid": "Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA",
-            "adm": "\"<?xml version='1.0' encoding='UTF-8' ?><VAST version='2.0.1'> <Ad id='Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA'> <InLine> <AdSystem><![CDATA[ARSPY]]></AdSystem> <AdTitle><![CDATA[Triton Digital a2x]]></AdTitle> <Impression id='ImpressionConfirmationURL'><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/1?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>        <Impression><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/2?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression> <Impression><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/3?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>     <Impression><![CDATA[http://cmod724.live.streamtheworld.com/track/audio/impression/4?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>  </InLine> </Ad></VAST>\"",
-            "price": 1,
+            "adm": "\"<?xml version='1.0' encoding='UTF-8' ?><VAST version='2.0.1'> <Ad id='Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA'> <InLine> <AdSystem><![CDATA[ARSPY]]></AdSystem> <AdTitle><![CDATA[Triton Digital a2x]]></AdTitle> <Impression id='ImpressionConfirmationURL'><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/1?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>        <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/2?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression> <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/3?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>     <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/4?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>  </InLine> </Ad></VAST>\"",
+            "price": 4,
             "id": "Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA",
             "impid": ""
           },

@@ -1,12 +1,14 @@
-package tritondigital
+package adswizz
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/mxmCherry/openrtb"
 	"github.com/prebid/prebid-server/adapters"
@@ -14,11 +16,11 @@ import (
 	"github.com/prebid/prebid-server/openrtb_ext"
 )
 
-type TritonDigitalAdapter struct {
+type AdsWizzAdapter struct {
 	URI string
 }
 
-func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
+func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
 	numImps := len(request.Imp)
 
 	requests := []*adapters.RequestData{}
@@ -39,54 +41,33 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		}
 
 		params := url.Values{}
-		params.Add("version", "1.6.9")
 
-		var adType string
-		if imp.Video.StartDelay != nil && *imp.Video.StartDelay != 0 {
-			adType = "midroll"
+		// id md5 as cachebuster
+		cb := fmt.Sprintf("%x", md5.Sum([]byte(imp.ID)))[:8]
+		params.Add("cb", cb)
 
-		} else {
-			adType = "preroll"
-		}
-		params.Add("type", adType)
-
-		if imp.Video.MinDuration > 0 {
-			params.Add("mindur", fmt.Sprintf("%d", imp.Video.MinDuration))
-		}
 		if imp.Video.MaxDuration > 0 {
-			params.Add("maxdur", fmt.Sprintf("%d", imp.Video.MaxDuration))
-		}
-
-		if imp.Video.MinBitRate > 0 {
-			params.Add("minbr", fmt.Sprintf("%d", imp.Video.MinBitRate))
-		}
-		if imp.Video.MaxBitRate > 0 {
-			params.Add("maxbr", fmt.Sprintf("%d", imp.Video.MaxBitRate))
+			params.Add("duration", fmt.Sprintf("%d", imp.Video.MaxDuration*1000))
 		}
 
 		if len(request.BCat) > 0 {
-			params.Add("iab-categories-to-exclude", strings.Join(request.BCat, ","))
-		}
-
-		if request.Site != nil {
-			if request.Site.Page != "" {
-				params.Add("referrer", request.Site.Page)
-			}
+			params.Add("cat_exclude", strings.Join(request.BCat, ","))
 		}
 
 		if request.User != nil {
-			if request.User.BuyerUID != "" {
-				params.Add("lsid", request.User.BuyerUID)
-			}
 
-			if request.User.Yob > 0 {
-				params.Add("yob", fmt.Sprintf("%d", request.User.Yob))
+			if request.User.BuyerUID != "" {
+				params.Add("listenerId", request.User.BuyerUID)
 			}
 
 			if request.User.Gender == "M" {
-				params.Add("gender", "m")
+				params.Add("aw_0_1st.gender", "male")
 			} else if request.User.Gender == "F" {
-				params.Add("gender", "f")
+				params.Add("aw_0_1st.gender", "female")
+			}
+
+			if request.User.Yob > 0 {
+				params.Add("aw_0_1st.age", fmt.Sprintf("%d", time.Now().Year()-int(request.User.Yob)))
 			}
 
 			if request.User.Geo != nil {
@@ -94,38 +75,33 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 					params.Add("lat", fmt.Sprintf("%f", request.User.Geo.Lat))
 				}
 				if request.User.Geo.Lon != 0 {
-					params.Add("long", fmt.Sprintf("%f", request.User.Geo.Lon))
-				}
-				if request.User.Geo.ZIP != "" {
-					params.Add("postalcode", request.User.Geo.ZIP)
-				}
-				if request.User.Geo.Country != "" {
-					params.Add("country", request.User.Geo.Country)
+					params.Add("lon", fmt.Sprintf("%f", request.User.Geo.Lon))
 				}
 			}
 		}
-
-		if request.Device != nil {
-			if request.Device.UA != "" {
-				params.Add("ua", request.Device.UA)
-			}
-			if request.Device.IP != "" {
-				params.Add("ip", request.Device.IP)
-			}
-		}
-
-		params.Add("at", "audio")
-		params.Add("fmt", "vast")
-		params.Add("banners", impExt.Banners)
-		params.Add("stid", impExt.StID)
 
 		headers := http.Header{}
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
+		if request.Device != nil {
+			if request.Device.UA != "" {
+				headers.Set("User-Agent", request.Device.UA)
+			}
+			if request.Device.IP != "" {
+				headers.Set("X-Forwarded-For", request.Device.IP)
+			}
+		}
+
+		if request.Site != nil {
+			if request.Site.Page != "" {
+				headers.Set("Referer", request.Site.Page)
+			}
+		}
+
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
-			Uri:     adapter.URI + "?" + params.Encode(),
+			Uri:     adapter.URI + "/" + impExt.Alias + "?" + params.Encode(),
 			Headers: headers,
 		}
 
@@ -139,7 +115,7 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 	return requests, nil
 }
 
-func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpTritonDigital, error) {
+func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpAdsWizz, error) {
 	var bidderExt adapters.ExtImpBidder
 
 	if err := json.Unmarshal(imp.Ext, &bidderExt); err != nil {
@@ -148,7 +124,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpTritonDigital, error) {
 		}
 	}
 
-	impExt := openrtb_ext.ExtImpTritonDigital{}
+	impExt := openrtb_ext.ExtImpAdsWizz{}
 	err := json.Unmarshal(bidderExt.Bidder, &impExt)
 	if err != nil {
 		return nil, &errortypes.BadInput{
@@ -167,7 +143,7 @@ type Ad struct {
 	ID string `xml:"id,attr,omitempty"`
 }
 
-func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
@@ -211,8 +187,8 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	return bidderResponse, nil
 }
 
-func NewTritonDigitalBidder(endpoint string) *TritonDigitalAdapter {
-	return &TritonDigitalAdapter{
+func NewAdsWizzBidder(endpoint string) *AdsWizzAdapter {
+	return &AdsWizzAdapter{
 		URI: endpoint,
 	}
 }

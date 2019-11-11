@@ -78,6 +78,7 @@ const (
 	BidderYieldmo          BidderName = "yieldmo"
 	BidderZeroClickFraud   BidderName = "zeroclickfraud"
 	BidderTritonDigital  BidderName = "tritondigital"
+	BidderAdsWizz        BidderName = "adswizz"
 )
 
 // BidderMap stores all the valid OpenRTB 2.x Bidders in the project. This map *must not* be mutated.
@@ -140,6 +141,7 @@ var BidderMap = map[string]BidderName{
 	"yieldmo":           BidderYieldmo,
 	"zeroclickfraud":    BidderZeroClickFraud,
 	"tritondigital":   BidderTritonDigital,
+	"adswizz":         BidderAdsWizz,
 }
 
 // BidderList returns the values of the BidderMap
