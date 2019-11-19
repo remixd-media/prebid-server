@@ -1,0 +1,8 @@
+vendor/
+.vscode
+.idea
+.~lock*
+.DS_Store
+bin/
+
+#!include:.gitignore
