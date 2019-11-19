@@ -81,7 +81,7 @@
           "bid": {
             "crid": "Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA",
             "adm": "\"<?xml version='1.0' encoding='UTF-8' ?><VAST version='2.0.1'> <Ad id='Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA'> <InLine> <AdSystem><![CDATA[ARSPY]]></AdSystem> <AdTitle><![CDATA[Triton Digital a2x]]></AdTitle> <Impression id='ImpressionConfirmationURL'><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/1?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>        <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/2?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression> <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/3?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>     <Impression><![CDATA[http://mock.live.streamtheworld.com/track/audio/impression/4?lsid=cookie:generated-by-arspy&cb=1565288161382]]></Impression>  </InLine> </Ad></VAST>\"",
-            "price": 4,
+            "price": 3,
             "id": "Y206YWQ9MjEzNzQ2MSZjcz0yMzA3MDgxJnR1PTA",
             "impid": ""
           },

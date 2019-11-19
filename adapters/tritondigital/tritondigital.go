@@ -196,12 +196,14 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 		}}
 	}
 
+	price := 3.00 // static value
+
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
 		Bid: &openrtb.Bid{
 			ID:    vast.Ads[0].ID,
 			ImpID: externalRequest.Headers.Get("PBS-IMP-ID"),
-			Price: 4.00,
+			Price: price,
 			AdM:   string(response.Body),
 			CrID:  vast.Ads[0].ID,
 		},

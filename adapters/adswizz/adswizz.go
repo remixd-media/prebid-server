@@ -192,10 +192,6 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 		price = 0
 	}
 
-	if internalRequest.Test == 1 {
-		price = 4.5 // testing value
-	}
-
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
 		Bid: &openrtb.Bid{
