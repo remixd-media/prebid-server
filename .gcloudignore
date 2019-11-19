@@ -4,5 +4,6 @@ vendor/
 .~lock*
 .DS_Store
 bin/
+./docs/
 
 #!include:.gitignore
