@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -140,7 +141,21 @@ type VAST struct {
 }
 
 type Ad struct {
-	ID string `xml:"id,attr,omitempty"`
+	ID     string `xml:"id,attr"`
+	InLine InLine `xml:"InLine"`
+}
+
+type Creative struct {
+	ID string `xml:"id,attr"`
+}
+
+type Creatives struct {
+	Creative []Creative `xml:"Creative"`
+}
+
+type InLine struct {
+	Pricing   string    `xml:"Pricing"`
+	Creatives Creatives `xml:"Creatives"`
 }
 
 func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
@@ -172,14 +187,23 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 		}}
 	}
 
+	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
+	if err != nil {
+		price = 0
+	}
+
+	if internalRequest.Test == 1 {
+		price = 4.5 // testing value
+	}
+
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
 		Bid: &openrtb.Bid{
 			ID:    vast.Ads[0].ID,
 			ImpID: externalRequest.Headers.Get("PBS-IMP-ID"),
-			Price: 4.00,
+			Price: price,
 			AdM:   string(response.Body),
-			CrID:  vast.Ads[0].ID,
+			CrID:  vast.Ads[0].InLine.Creatives.Creative[0].ID,
 		},
 		BidType: openrtb_ext.BidTypeVideo,
 	})
