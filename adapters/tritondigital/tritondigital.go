@@ -76,7 +76,7 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 
 		if request.User != nil {
 			if request.User.BuyerUID != "" {
-				params.Add("lsid", request.User.BuyerUID)
+				//	params.Add("lsid", request.User.BuyerUID)
 			}
 
 			if request.User.Yob > 0 {
