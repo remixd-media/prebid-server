@@ -196,7 +196,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 		}}
 	}
 
-	price := 3.00 // static value
+	price := 2.50 // static value
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
