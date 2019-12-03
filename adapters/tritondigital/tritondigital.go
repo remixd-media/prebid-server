@@ -42,12 +42,11 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		params.Add("version", "1.6.9")
 
 		var adType string
-		if imp.Video.StartDelay != nil && *imp.Video.StartDelay != 0 {
+		/*	if imp.Video.StartDelay != nil && *imp.Video.StartDelay != 0 {
 			adType = "midroll"
-
-		} else {
-			adType = "preroll"
-		}
+		} else {*/
+		adType = "preroll"
+		//		}
 		params.Add("type", adType)
 
 		if imp.Video.MinDuration > 0 {
