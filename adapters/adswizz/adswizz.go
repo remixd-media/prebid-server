@@ -193,6 +193,9 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 			Message: fmt.Sprintf("Couldn't parse CPM"),
 		}}
 	}
+	if price == 0 {
+		price = 0.1
+	}
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
