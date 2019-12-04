@@ -189,7 +189,9 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 
 	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
 	if err != nil {
-		price = 0
+		return nil, []error{&errortypes.BadServerResponse{
+			Message: fmt.Sprintf("Couldn't parse CPM"),
+		}}
 	}
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
