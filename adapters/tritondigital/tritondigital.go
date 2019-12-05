@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/mxmCherry/openrtb"
@@ -158,14 +159,6 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpTritonDigital, error) {
 	return &impExt, nil
 }
 
-type VAST struct {
-	Ads []Ad `xml:"Ad"`
-}
-
-type Ad struct {
-	ID string `xml:"id,attr,omitempty"`
-}
-
 func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
@@ -183,7 +176,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 		}}
 	}
 
-	var vast VAST
+	var vast adapters.VAST
 	err := xml.Unmarshal(response.Body, &vast)
 	if err != nil {
 		return nil, []error{err}
@@ -195,7 +188,36 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 		}}
 	}
 
-	price := 2.50 // static value
+	if len(vast.Ads) == 0 {
+		return nil, []error{&errortypes.BadServerResponse{
+			Message: fmt.Sprintf("No Ads in VAST response"),
+		}}
+	}
+
+	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
+	if err != nil {
+		/*return nil, []error{&errortypes.BadServerResponse{
+			Message: fmt.Sprintf("Couldn't parse CPM"),
+		}}*/
+		//ignore errors
+	}
+
+	if price == 0 {
+		price = 2.5
+	}
+
+	var crID string
+	var duration int
+
+	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
+		creative := vast.Ads[0].InLine.Creatives.Creative[0]
+
+		crID = creative.ID
+		duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
+	}
+
+	adm := string(response.Body)
+	adm = adapters.HidePricing(adm)
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
@@ -203,10 +225,13 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 			ID:    vast.Ads[0].ID,
 			ImpID: externalRequest.Headers.Get("PBS-IMP-ID"),
 			Price: price,
-			AdM:   string(response.Body),
-			CrID:  vast.Ads[0].ID,
+			AdM:   adm,
+			CrID:  crID,
 		},
 		BidType: openrtb_ext.BidTypeVideo,
+		BidVideo: &openrtb_ext.ExtBidPrebidVideo{
+			Duration: duration,
+		},
 	})
 
 	return bidderResponse, nil

@@ -136,28 +136,6 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpAdsWizz, error) {
 	return &impExt, nil
 }
 
-type VAST struct {
-	Ads []Ad `xml:"Ad"`
-}
-
-type Ad struct {
-	ID     string `xml:"id,attr"`
-	InLine InLine `xml:"InLine"`
-}
-
-type Creative struct {
-	ID string `xml:"id,attr"`
-}
-
-type Creatives struct {
-	Creative []Creative `xml:"Creative"`
-}
-
-type InLine struct {
-	Pricing   string    `xml:"Pricing"`
-	Creatives Creatives `xml:"Creatives"`
-}
-
 func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
@@ -175,7 +153,7 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 		}}
 	}
 
-	var vast VAST
+	var vast adapters.VAST
 	err := xml.Unmarshal(response.Body, &vast)
 	if err != nil {
 		return nil, []error{err}
@@ -197,6 +175,16 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 		price = 0.1
 	}
 
+	var crID string
+	var duration int
+
+	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
+		creative := vast.Ads[0].InLine.Creatives.Creative[0]
+
+		crID = creative.ID
+		duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
+	}
+
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
 		Bid: &openrtb.Bid{
@@ -204,9 +192,12 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 			ImpID: externalRequest.Headers.Get("PBS-IMP-ID"),
 			Price: price,
 			AdM:   string(response.Body),
-			CrID:  vast.Ads[0].InLine.Creatives.Creative[0].ID,
+			CrID:  crID,
 		},
 		BidType: openrtb_ext.BidTypeVideo,
+		BidVideo: &openrtb_ext.ExtBidPrebidVideo{
+			Duration: duration,
+		},
 	})
 
 	return bidderResponse, nil
