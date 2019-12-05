@@ -161,6 +161,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpTritonDigital, error) {
 
 func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
+		fmt.Printf("triton no content (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
 		return nil, nil
 	}
 
@@ -184,6 +185,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	}
 
 	if len(vast.Ads) == 0 {
+		fmt.Printf("triton no ad (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("No Ads in VAST response"),
 		}}
