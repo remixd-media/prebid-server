@@ -179,13 +179,8 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	var vast adapters.VAST
 	err := xml.Unmarshal(response.Body, &vast)
 	if err != nil {
+		fmt.Printf("triton vast parse error: %s\n", err)
 		return nil, []error{err}
-	}
-
-	if len(vast.Ads) == 0 {
-		return nil, []error{&errortypes.BadServerResponse{
-			Message: fmt.Sprintf("No Ads in VAST response"),
-		}}
 	}
 
 	if len(vast.Ads) == 0 {
