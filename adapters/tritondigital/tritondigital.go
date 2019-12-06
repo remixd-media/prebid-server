@@ -160,8 +160,10 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpTritonDigital, error) {
 }
 
 func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+	//fmt.Printf("triton makebids start: (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
+
 	if response.StatusCode == http.StatusNoContent {
-		fmt.Printf("triton no content (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
+		//fmt.Printf("triton no content (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
 		return nil, nil
 	}
 
@@ -180,12 +182,12 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	var vast adapters.VAST
 	err := xml.Unmarshal(response.Body, &vast)
 	if err != nil {
-		fmt.Printf("triton vast parse error: %s\n", err)
+		//fmt.Printf("triton vast parse error: %s\n", err)
 		return nil, []error{err}
 	}
 
 	if len(vast.Ads) == 0 {
-		fmt.Printf("triton no ad (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
+		//fmt.Printf("triton no ad (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("No Ads in VAST response"),
 		}}
@@ -210,7 +212,13 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 		creative := vast.Ads[0].InLine.Creatives.Creative[0]
 
 		crID = creative.ID
-		duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
+		duration = adapters.ParseDuration(creative.Linear.Duration)
+	}
+
+	adID := vast.Ads[0].ID
+
+	if crID == "" {
+		crID = adID // avoid having empty crID
 	}
 
 	adm := string(response.Body)
