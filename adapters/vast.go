@@ -49,12 +49,12 @@ func ParseDuration(dur string) int {
 		// ignore
 	}
 
-	seconds, err := strconv.Atoi(parts[2])
+	seconds, err := strconv.ParseFloat(parts[2], 64)
 	if err != nil {
 		// ignore
 	}
 
-	return (hours * 60 * 60) + (minutes * 60) + seconds
+	return (hours * 60 * 60) + (minutes * 60) + int(seconds)
 }
 
 var pricingHiderRe *regexp.Regexp

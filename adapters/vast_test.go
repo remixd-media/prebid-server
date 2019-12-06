@@ -7,6 +7,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestParseDuration(t *testing.T) {
+	assert.Equal(t, 75, adapters.ParseDuration("00:01:15"))
+	assert.Equal(t, 75, adapters.ParseDuration("00:01:15.000"))
+	assert.Equal(t, 7320, adapters.ParseDuration("02:02:00"))
+	assert.Equal(t, 7325, adapters.ParseDuration("02:02:05"))
+}
+
 func TestHidePricing(t *testing.T) {
 	adm := adapters.HidePricing(`<?xml version='1.0' encoding='UTF-8'?>
 	<VAST version='2.0.1'>
