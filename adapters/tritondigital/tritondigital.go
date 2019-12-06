@@ -161,7 +161,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpTritonDigital, error) {
 
 func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	fmt.Printf("triton makebids start: (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
-	go fmt.Printf("triton makebids done: (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
+	defer fmt.Printf("triton makebids done: (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
 
 	if response.StatusCode == http.StatusNoContent {
 		fmt.Printf("triton no content (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
