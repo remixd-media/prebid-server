@@ -225,7 +225,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	}
 
 	adm := string(response.Body)
-	// adm = adapters.HidePricing(adm)
+	adm = adapters.HidePricing(adm)
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
