@@ -198,15 +198,13 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 
 	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
 	if err != nil {
-		/*return nil, []error{&errortypes.BadServerResponse{
+		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("Couldn't parse CPM"),
-		}}*/
-		//ignore errors
+		}}
 	}
 
-	if price == 0 {
-		price = 2.5
-	}
+	// adjust to net
+	price = price * 0.8
 
 	var crID string
 	var duration int
