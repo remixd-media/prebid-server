@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"math"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -205,6 +206,8 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 
 	// adjust to net
 	price = price * 0.8
+	// round to 4 decimals
+	price = math.Floor(price*10000) / 10000
 
 	var crID string
 	var duration int
