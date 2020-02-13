@@ -1,0 +1,10 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "BidSwitch Adapter Params",
+    "description": "A schema which validates params accepted by the BidSwitch adapter",
+    "type": "object",
+    "properties": {
+    },
+    "required": []
+  }
+  

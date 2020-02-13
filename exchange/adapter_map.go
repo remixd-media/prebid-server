@@ -20,6 +20,7 @@ import (
 	"github.com/prebid/prebid-server/adapters/appnexus"
 	"github.com/prebid/prebid-server/adapters/audienceNetwork"
 	"github.com/prebid/prebid-server/adapters/beachfront"
+	"github.com/prebid/prebid-server/adapters/bidswitch"
 	"github.com/prebid/prebid-server/adapters/brightroll"
 	"github.com/prebid/prebid-server/adapters/consumable"
 	"github.com/prebid/prebid-server/adapters/conversant"
@@ -139,6 +140,7 @@ func newAdapterMap(client *http.Client, cfg *config.Configuration, infos adapter
 		openrtb_ext.BidderZeroClickFraud:   zeroclickfraud.NewZeroClickFraudBidder(cfg.Adapters[string(openrtb_ext.BidderZeroClickFraud)].Endpoint),
 		openrtb_ext.BidderTritonDigital:  tritondigital.NewTritonDigitalBidder(cfg.Adapters[string(openrtb_ext.BidderTritonDigital)].Endpoint),
 		openrtb_ext.BidderAdsWizz:        adswizz.NewAdsWizzBidder(cfg.Adapters[string(openrtb_ext.BidderAdsWizz)].Endpoint),
+		openrtb_ext.BidderBidSwitch:      bidswitch.NewBidSwitchBidder(cfg.Adapters[string(openrtb_ext.BidderBidSwitch)].Endpoint),
 	}
 
 	legacyBidders := map[openrtb_ext.BidderName]adapters.Adapter{
