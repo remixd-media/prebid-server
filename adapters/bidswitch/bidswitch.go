@@ -21,6 +21,10 @@ type BidSwitchAdapter struct {
 func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
 	requests := []*adapters.RequestData{}
 
+	for i := range request.Imp {
+		request.Imp[i].Video = nil // remove unused video section
+	}
+
 	jsonBody, err := json.Marshal(request)
 	if err != nil {
 		return nil, []error{err}
