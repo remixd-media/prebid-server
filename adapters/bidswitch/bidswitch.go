@@ -23,6 +23,10 @@ func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 
 	for i := range request.Imp {
 		request.Imp[i].Video = nil // remove unused video section
+		request.Imp[i].Ext = nil   // remove unused imp ext
+		if request.Site != nil {
+			request.Site.Ext = nil // remove unused site ext
+		}
 	}
 
 	jsonBody, err := json.Marshal(request)
