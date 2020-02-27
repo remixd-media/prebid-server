@@ -44,6 +44,8 @@ func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		Headers: headers,
 	}
 
+	fmt.Printf("bidswitch makerequests jsonBody: %s\n", string(jsonBody))
+
 	if os.Getenv("PBS_BIDSWITCH_NO_GZIP") == "1" {
 		reqData.Body = jsonBody
 	} else {
