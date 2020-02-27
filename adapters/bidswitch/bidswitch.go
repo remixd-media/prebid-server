@@ -56,6 +56,9 @@ func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 }
 
 func (adapter *BidSwitchAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+	fmt.Printf("bidswitch makebids start: (ip: %v | page: %v | status: %d)\n", internalRequest.Device.IP, internalRequest.Site.Page, response.StatusCode)
+	defer fmt.Printf("bidswitch makebids done: (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
+
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
@@ -75,8 +78,10 @@ func (adapter *BidSwitchAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	var bidResponse openrtb.BidResponse
 	err := json.Unmarshal(response.Body, &bidResponse)
 	if err != nil {
-		return nil, []error{fmt.Errorf("bid responsed decode: %v", err)}
+		return nil, []error{fmt.Errorf("bid response decode: %v", err)}
 	}
+
+	fmt.Printf("bidswitch MakeBids: bidResponse: %+v\n", bidResponse)
 
 	if len(bidResponse.SeatBid) == 0 {
 		// no bid
