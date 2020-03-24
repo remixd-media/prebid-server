@@ -564,6 +564,8 @@ func NewRubiconBidder(client *http.Client, uri string, xuser string, xpass strin
 }
 
 func (a *RubiconAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
+	fmt.Printf("NEW rubicon request\n")
+
 	numRequests := len(request.Imp)
 	errs := make([]error, 0, len(request.Imp))
 	var err error
@@ -687,6 +689,7 @@ func (a *RubiconAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adap
 
 		isVideo := isVideo(thisImp)
 		if isVideo {
+			rubiconExt.Video.VideoSizeID = 206 // audio preroll https://resources.rubiconproject.com/resource/publisher-resources/supported-ad-formats/#FMTS-Display
 			if rubiconExt.Video.VideoSizeID == 0 {
 				errs = append(errs, &errortypes.BadInput{
 					Message: fmt.Sprintf("imp[%d].ext.bidder.rubicon.video.size_id must be defined for video impression", i),
@@ -756,9 +759,13 @@ func (a *RubiconAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adap
 			Body:    reqJSON,
 			Headers: headers,
 		}
+		fmt.Printf("req json: %v\n", string(reqJSON))
 		reqData.SetBasicAuth(a.XAPIUsername, a.XAPIPassword)
+		fmt.Printf("req headers: %+v\n", headers)
 		requestData = append(requestData, reqData)
 	}
+
+	fmt.Printf("NEW requestData: %v\nerrs: %v", requestData, errs)
 
 	return requestData, errs
 }
@@ -854,6 +861,8 @@ func isFullyPopulatedVideo(video *openrtb.Video) bool {
 }
 
 func (a *RubiconAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+	fmt.Printf("status code: %d", response.StatusCode)
+
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}

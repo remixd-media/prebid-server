@@ -17,7 +17,7 @@
     "imp": [
       {
         "id": "test-imp-id",
-        "video": {
+        "audio": {
           "startdelay": 0,
           "minduration": 5,
           "maxduration": 30,
@@ -80,7 +80,7 @@
           "imp": [
             {
               "id": "test-imp-id",
-              "video": {
+              "audio": {
                 "startdelay": 0,
                 "minduration": 5,
                 "maxduration": 30,
