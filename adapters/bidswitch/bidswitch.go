@@ -5,8 +5,10 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/mxmCherry/openrtb"
 	"github.com/prebid/prebid-server/adapters"
@@ -85,13 +87,34 @@ func (adapter *BidSwitchAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 		}}
 	}
 
+	var responseBody []byte
+	if strings.Contains(response.Headers.Get("Content-Encoding"), "gzip") {
+		// unzip response
+		gzipReader, err := gzip.NewReader(bytes.NewReader(response.Body))
+		if err != nil {
+			return nil, []error{&errortypes.BadServerResponse{
+				Message: fmt.Sprintf("Bad server response: gunzip err %d", response.StatusCode),
+			}}
+		}
+		responseBody, err = ioutil.ReadAll(gzipReader)
+		if err != nil {
+			return nil, []error{&errortypes.BadServerResponse{
+				Message: fmt.Sprintf("Bad server response: gunzip read err %d", response.StatusCode),
+			}}
+		}
+	} else {
+		responseBody = response.Body
+	}
+
+	fmt.Printf("bidswitch makeBids response body: %s\n", string(responseBody))
+
 	var bidResponse openrtb.BidResponse
-	err := json.Unmarshal(response.Body, &bidResponse)
+	err := json.Unmarshal(responseBody, &bidResponse)
 	if err != nil {
 		return nil, []error{fmt.Errorf("bid response decode: %v", err)}
 	}
 
-	fmt.Printf("bidswitch MakeBids: bidResponse: %+v\n", bidResponse)
+	fmt.Printf("bidswitch makeBids bidResponse: %+v\n", bidResponse)
 
 	if len(bidResponse.SeatBid) == 0 {
 		// no bid
