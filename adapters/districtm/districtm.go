@@ -123,8 +123,15 @@ func (adapter *DistrictMAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(len(bidResponse.SeatBid))
 	for _, seatBid := range bidResponse.SeatBid {
 		for i := range seatBid.Bid {
+			bid := &seatBid.Bid[i]
+			if bid.BURL == "" {
+				// fix to move NURL to BURL, districtm specific issue
+				bid.BURL = bid.NURL
+				bid.NURL = ""
+			}
+
 			bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
-				Bid:     &seatBid.Bid[i],
+				Bid:     bid,
 				BidType: openrtb_ext.BidTypeVideo,
 			})
 		}

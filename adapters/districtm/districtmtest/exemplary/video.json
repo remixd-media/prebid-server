@@ -129,7 +129,7 @@
                    {
                       "crid":"3tre445",
                       "adm":"<?xml version=\"1.0\" encoding=\"UTF-8\"?><VAST version=\"2.0\"><Ad id=\"e1081d52_a3d9353a3f5711e795201cdbeb920001\"><Wrapper><AdSystem>DistrictM<\/AdSystem><VASTAdTagURI><![CDATA[http:\/\/adsrv.com\/vast\/7drQU9ksr]]><\/VASTAdTagURI><Error><![CDATA[http:\/\/gce-sc.districtm.net\/vast_error\/gdmj4t2_3wJg\/]]><\/Error><Impression><![CDATA[http:\/\/gce-sc.districtm.net\/imp\/${AUCTION_PRICE}\/mj4t2_3wJg\/]]><\/Impression><Creatives><\/Creatives><\/Wrapper><\/Ad><\/VAST>",
-                      "burl":"https://adserver.com/imp?impid=102&winprice=${AUCTION_PRICE}",
+                      "nurl":"https://adserver.com/imp?impid=102&winprice=${AUCTION_PRICE}",
                       "adomain":[
                          "example.com"
                       ],
