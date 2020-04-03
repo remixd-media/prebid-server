@@ -564,7 +564,7 @@ func NewRubiconBidder(client *http.Client, uri string, xuser string, xpass strin
 }
 
 func (a *RubiconAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
-	fmt.Printf("NEW rubicon request\n")
+	fmt.Printf("rubicon MakeRequests start\n")
 
 	numRequests := len(request.Imp)
 	errs := make([]error, 0, len(request.Imp))
@@ -759,13 +759,13 @@ func (a *RubiconAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adap
 			Body:    reqJSON,
 			Headers: headers,
 		}
-		fmt.Printf("req json: %v\n", string(reqJSON))
+		fmt.Printf("rubicon req json: %v\n", string(reqJSON))
 		reqData.SetBasicAuth(a.XAPIUsername, a.XAPIPassword)
-		fmt.Printf("req headers: %+v\n", headers)
+		fmt.Printf("rubicon req headers: %+v\n", headers)
 		requestData = append(requestData, reqData)
 	}
 
-	fmt.Printf("NEW requestData: %v\nerrs: %v", requestData, errs)
+	fmt.Printf("rubicon requestData: %+v\nrubicon errs: %v\n", requestData, errs)
 
 	return requestData, errs
 }
@@ -861,7 +861,7 @@ func isFullyPopulatedVideo(video *openrtb.Video) bool {
 }
 
 func (a *RubiconAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
-	fmt.Printf("status code: %d", response.StatusCode)
+	fmt.Printf("rubicon status code: %d\n", response.StatusCode)
 
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
@@ -878,6 +878,8 @@ func (a *RubiconAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalR
 			Message: fmt.Sprintf("Unexpected status code: %d. Run with request.debug = 1 for more info", response.StatusCode),
 		}}
 	}
+
+	fmt.Printf("rubicon makeBids response body: %s\n", string(response.Body))
 
 	var bidResp openrtb.BidResponse
 	if err := json.Unmarshal(response.Body, &bidResp); err != nil {

@@ -42,6 +42,11 @@
             13,
             14
           ]
+        },
+        "ext": {
+          "bidder": {
+            "publisherID": "123456"
+          }
         }
       }
     ],
@@ -53,13 +58,10 @@
     {
       "expectedRequest": {
         "method": "POST",
-        "uri": "https://xtest.bidswitch.com/",
+        "uri": "https://xtest.districtm.com/",
         "headers":  {
-            "Accept-Encoding": [
-               "gzip"
-            ],
-            "Content-Encoding": [
-               "gzip"
+            "Content-Type": [
+               "application/json"
             ]
         },
         "body": {
@@ -109,7 +111,10 @@
             }
           ],
           "site": {
-            "page": "http://example.com/page-1"
+            "page": "http://example.com/page-1",
+            "publisher": {
+              "id": "123456"
+            }
           }
         }
       },
@@ -123,7 +128,7 @@
                 "bid":[
                    {
                       "crid":"3tre445",
-                      "adm":"<?xml version=\"1.0\" encoding=\"UTF-8\"?><VAST version=\"2.0\"><Ad id=\"e1081d52_a3d9353a3f5711e795201cdbeb920001\"><Wrapper><AdSystem>BidSwitch<\/AdSystem><VASTAdTagURI><![CDATA[http:\/\/adsrv.com\/vast\/7drQU9ksr]]><\/VASTAdTagURI><Error><![CDATA[http:\/\/gce-sc.bidswitch.net\/vast_error\/gdmj4t2_3wJg\/]]><\/Error><Impression><![CDATA[http:\/\/gce-sc.bidswitch.net\/imp\/${AUCTION_PRICE}\/mj4t2_3wJg\/]]><\/Impression><Creatives><\/Creatives><\/Wrapper><\/Ad><\/VAST>",
+                      "adm":"<?xml version=\"1.0\" encoding=\"UTF-8\"?><VAST version=\"2.0\"><Ad id=\"e1081d52_a3d9353a3f5711e795201cdbeb920001\"><Wrapper><AdSystem>DistrictM<\/AdSystem><VASTAdTagURI><![CDATA[http:\/\/adsrv.com\/vast\/7drQU9ksr]]><\/VASTAdTagURI><Error><![CDATA[http:\/\/gce-sc.districtm.net\/vast_error\/gdmj4t2_3wJg\/]]><\/Error><Impression><![CDATA[http:\/\/gce-sc.districtm.net\/imp\/${AUCTION_PRICE}\/mj4t2_3wJg\/]]><\/Impression><Creatives><\/Creatives><\/Wrapper><\/Ad><\/VAST>",
                       "burl":"https://adserver.com/imp?impid=102&winprice=${AUCTION_PRICE}",
                       "adomain":[
                          "example.com"
@@ -159,7 +164,7 @@
               "example.com"
             ],
             "burl": "https://adserver.com/imp?impid=102&winprice=${AUCTION_PRICE}",
-            "adm": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><VAST version=\"2.0\"><Ad id=\"e1081d52_a3d9353a3f5711e795201cdbeb920001\"><Wrapper><AdSystem>BidSwitch</AdSystem><VASTAdTagURI><![CDATA[http://adsrv.com/vast/7drQU9ksr]]></VASTAdTagURI><Error><![CDATA[http://gce-sc.bidswitch.net/vast_error/gdmj4t2_3wJg/]]></Error><Impression><![CDATA[http://gce-sc.bidswitch.net/imp/${AUCTION_PRICE}/mj4t2_3wJg/]]></Impression><Creatives></Creatives></Wrapper></Ad></VAST>",
+            "adm": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><VAST version=\"2.0\"><Ad id=\"e1081d52_a3d9353a3f5711e795201cdbeb920001\"><Wrapper><AdSystem>DistrictM</AdSystem><VASTAdTagURI><![CDATA[http://adsrv.com/vast/7drQU9ksr]]></VASTAdTagURI><Error><![CDATA[http://gce-sc.districtm.net/vast_error/gdmj4t2_3wJg/]]></Error><Impression><![CDATA[http://gce-sc.districtm.net/imp/${AUCTION_PRICE}/mj4t2_3wJg/]]></Impression><Creatives></Creatives></Wrapper></Ad></VAST>",
             "price": 4.079077199308326,
             "id": "1c3ff810-3623-4b04-8396-9e7ca071cb72",
             "impid": "1",

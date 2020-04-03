@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "DistrictM Adapter Params",
+    "description": "A schema which validates params accepted by the DistrictM adapter",
+    "type": "object",
+    "properties": {
+      "publisherId": {
+        "type": "string",
+        "description": "publisher id"
+      }
+    },
+    "required": ["publisherId"]
+  }
+  

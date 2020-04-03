@@ -26,6 +26,7 @@ import (
 	"github.com/prebid/prebid-server/adapters/conversant"
 	"github.com/prebid/prebid-server/adapters/cpmstar"
 	"github.com/prebid/prebid-server/adapters/datablocks"
+	"github.com/prebid/prebid-server/adapters/districtm"
 	"github.com/prebid/prebid-server/adapters/emx_digital"
 	"github.com/prebid/prebid-server/adapters/engagebdr"
 	"github.com/prebid/prebid-server/adapters/eplanning"
@@ -138,9 +139,10 @@ func newAdapterMap(client *http.Client, cfg *config.Configuration, infos adapter
 		openrtb_ext.BidderVrtcal:           vrtcal.NewVrtcalBidder(cfg.Adapters[string(openrtb_ext.BidderVrtcal)].Endpoint),
 		openrtb_ext.BidderYieldmo:          yieldmo.NewYieldmoBidder(cfg.Adapters[string(openrtb_ext.BidderYieldmo)].Endpoint),
 		openrtb_ext.BidderZeroClickFraud:   zeroclickfraud.NewZeroClickFraudBidder(cfg.Adapters[string(openrtb_ext.BidderZeroClickFraud)].Endpoint),
-		openrtb_ext.BidderTritonDigital:  tritondigital.NewTritonDigitalBidder(cfg.Adapters[string(openrtb_ext.BidderTritonDigital)].Endpoint),
-		openrtb_ext.BidderAdsWizz:        adswizz.NewAdsWizzBidder(cfg.Adapters[string(openrtb_ext.BidderAdsWizz)].Endpoint),
-		openrtb_ext.BidderBidSwitch:      bidswitch.NewBidSwitchBidder(cfg.Adapters[string(openrtb_ext.BidderBidSwitch)].Endpoint),
+		openrtb_ext.BidderTritonDigital:    tritondigital.NewTritonDigitalBidder(cfg.Adapters[string(openrtb_ext.BidderTritonDigital)].Endpoint),
+		openrtb_ext.BidderAdsWizz:          adswizz.NewAdsWizzBidder(cfg.Adapters[string(openrtb_ext.BidderAdsWizz)].Endpoint),
+		openrtb_ext.BidderBidSwitch:        bidswitch.NewBidSwitchBidder(cfg.Adapters[string(openrtb_ext.BidderBidSwitch)].Endpoint),
+		openrtb_ext.BidderDistrictM:        districtm.NewDistrictMBidder(cfg.Adapters[string(openrtb_ext.BidderDistrictM)].Endpoint),
 	}
 
 	legacyBidders := map[openrtb_ext.BidderName]adapters.Adapter{
