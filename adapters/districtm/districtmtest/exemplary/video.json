@@ -82,6 +82,7 @@
           "imp": [
             {
               "id": "test-imp-id",
+              "tagid": "DMX-Remixd",
               "video": {
                 "startdelay": 0,
                 "minduration": 5,

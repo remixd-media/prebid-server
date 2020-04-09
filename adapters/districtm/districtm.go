@@ -43,6 +43,8 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 			request.Imp[i].Video.H = 1
 		}*/
 
+		request.Imp[i].TagID = "DMX-Remixd"
+
 		if request.User == nil || request.User.BuyerUID == "" {
 			return nil, []error{fmt.Errorf("districtm no user buyer id")}
 		}
@@ -68,6 +70,7 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 	requests = append(requests, &reqData)
 
 	if len(errors) != 0 {
+		fmt.Printf("districtm errors: %+v\n", errors)
 		return nil, errors
 	}
 
