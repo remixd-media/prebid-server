@@ -38,10 +38,10 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 			request.Site.Publisher.ID = impExt.PublisherID
 		}
 
-		if request.Imp[i].Video != nil {
+		/*	if request.Imp[i].Video != nil {
 			request.Imp[i].Video.W = 1
 			request.Imp[i].Video.H = 1
-		}
+		}*/
 
 		if request.User == nil || request.User.BuyerUID == "" {
 			return nil, []error{fmt.Errorf("districtm no user buyer id")}
