@@ -544,6 +544,7 @@ func (cfg *Configuration) setDerivedDefaults() {
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderYieldmo, "https://ads.yieldmo.com/pbsync?gdpr={{.GDPR}}&gdpr_consent={{.GDPRConsent}}&us_privacy={{.USPrivacy}}&redirectUri="+url.QueryEscape(externalURL)+"%2Fsetuid%3Fbidder%3Dyieldmo%26gdpr%3D{{.GDPR}}%26gdpr_consent%3D{{.GDPRConsent}}%26uid%3D%24UID")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderZeroClickFraud, "https://s.0cf.io/sync?gdpr={{.GDPR}}&gdpr_consent={{.GDPRConsent}}&us_privacy={{.USPrivacy}}&r="+url.QueryEscape(externalURL)+"%2Fsetuid%3Fbidder%3Dzeroclickfraud%26gdpr%3D{{.GDPR}}%26gdpr_consent%3D{{.GDPRConsent}}%26uid%3D%24%7Buid%7D")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderTritonDigital, "http://playerservices.live.streamtheworld.com/api/getuuid?redir="+url.QueryEscape(externalURL)+"%2Fsetuid%3Fbidder%3Dtritondigital%26uid%3D@UUID@")
+	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderBidSwitch, "https://x.bidswitch.net/sync?ssp=rax20")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderDistrictM, "https://cdn.districtm.io/ids/?sellerid=101977")
 }
 

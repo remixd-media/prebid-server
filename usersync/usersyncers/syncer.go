@@ -16,6 +16,7 @@ import (
 	"github.com/prebid/prebid-server/adapters/appnexus"
 	"github.com/prebid/prebid-server/adapters/audienceNetwork"
 	"github.com/prebid/prebid-server/adapters/beachfront"
+	"github.com/prebid/prebid-server/adapters/bidswitch"
 	"github.com/prebid/prebid-server/adapters/brightroll"
 	"github.com/prebid/prebid-server/adapters/consumable"
 	"github.com/prebid/prebid-server/adapters/conversant"
@@ -121,6 +122,7 @@ func NewSyncerMap(cfg *config.Configuration) map[openrtb_ext.BidderName]usersync
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderYieldmo, yieldmo.NewYieldmoSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderZeroClickFraud, zeroclickfraud.NewZeroClickFraudSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderTritonDigital, tritondigital.NewTritonDigitalSyncer)
+	insertIntoMap(cfg, syncers, openrtb_ext.BidderBidSwitch, bidswitch.NewBidSwitchSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderDistrictM, districtm.NewDistrictMSyncer)
 
 	return syncers
