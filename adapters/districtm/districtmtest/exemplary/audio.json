@@ -17,7 +17,7 @@
     "imp": [
       {
         "id": "test-imp-id",
-        "video": {
+        "audio": {
           "startdelay": 0,
           "minduration": 5,
           "maxduration": 30,
@@ -83,7 +83,7 @@
             {
               "id": "test-imp-id",
               "tagid": "DMX-Remixd",
-              "video": {
+              "audio": {
                 "startdelay": 0,
                 "minduration": 5,
                 "maxduration": 30,

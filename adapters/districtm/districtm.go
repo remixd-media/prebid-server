@@ -27,7 +27,7 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 			continue
 		}
 
-		request.Imp[i].Audio = nil // remove unused audio section
+		request.Imp[i].Video = nil // remove unused video section
 		request.Imp[i].Ext = nil   // remove unused imp ext
 		if request.Site != nil {
 			request.Site.Ext = nil // remove unused site ext
@@ -37,11 +37,6 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 			}
 			request.Site.Publisher.ID = impExt.PublisherID
 		}
-
-		/*	if request.Imp[i].Video != nil {
-			request.Imp[i].Video.W = 1
-			request.Imp[i].Video.H = 1
-		}*/
 
 		request.Imp[i].TagID = "DMX-Remixd"
 
