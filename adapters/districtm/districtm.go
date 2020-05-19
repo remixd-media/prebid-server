@@ -40,9 +40,9 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 
 		request.Imp[i].TagID = "DMX-Remixd"
 
-		if request.User == nil || request.User.BuyerUID == "" {
-			return nil, []error{fmt.Errorf("districtm no user buyer id")}
-		}
+		/*		if request.User == nil || request.User.BuyerUID == "" {
+				return nil, []error{fmt.Errorf("districtm no user buyer id")}
+			}*/
 	}
 
 	jsonBody, err := json.Marshal(request)
