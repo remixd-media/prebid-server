@@ -161,37 +161,39 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpTritonDigital, error) {
 }
 
 func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
-	//fmt.Printf("triton makebids start: (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
-	//defer fmt.Printf("triton makebids done: (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
+	fmt.Printf("tritondigital makebids start (id: %v)\n", internalRequest.ID)
+	defer fmt.Printf("tritondigital makebids (id: %v):\n", internalRequest.ID)
 
 	if response.StatusCode == http.StatusNoContent {
-		//fmt.Printf("triton no content (ip: %v | page: %v)\n", internalRequest.Device.IP, internalRequest.Site.Page)
+		fmt.Printf("tritondigital makeBids no content (id: %v):\n", internalRequest.ID)
 		return nil, nil
 	}
 
 	if response.StatusCode == http.StatusBadRequest {
-		//fmt.Printf("triton err Bad input: HTTP status %d\n", response.StatusCode)
+		fmt.Printf("tritondigital makeBids err bad input (id: %v): http status %v\n", internalRequest.ID, response.StatusCode)
 		return nil, []error{&errortypes.BadInput{
-			Message: fmt.Sprintf("Bad user input: HTTP status %d", response.StatusCode),
+			Message: fmt.Sprintf("Bad user input (id: %v): HTTP status %v", internalRequest.ID, response.StatusCode),
 		}}
 	}
 
 	if response.StatusCode != http.StatusOK {
-		//fmt.Printf("triton err Bad server response: HTTP status %d\n", response.StatusCode)
+		fmt.Printf("tritondigital makeBids err bad server response (id: %v): http status %v\n", internalRequest.ID, response.StatusCode)
 		return nil, []error{&errortypes.BadServerResponse{
-			Message: fmt.Sprintf("Bad server response: HTTP status %d", response.StatusCode),
+			Message: fmt.Sprintf("Bad server response: HTTP status %v", response.StatusCode),
 		}}
 	}
+
+	fmt.Printf("tritondigital makeBids response body (id: %v): %q\n", internalRequest.ID, string(response.Body))
 
 	var vast adapters.VAST
 	err := xml.Unmarshal(response.Body, &vast)
 	if err != nil {
-		//fmt.Printf("triton vast parse error: %s\n", err)
+		fmt.Printf("tritondigital makeBids vast parse error (id: %v): %v\n", internalRequest.ID, err)
 		return nil, []error{err}
 	}
 
 	if len(vast.Ads) == 0 {
-		//fmt.Printf("triton no ad (ip: %v | page: %v\nbody %v)\n", internalRequest.Device.IP, internalRequest.Site.Page, string(response.Body))
+		fmt.Printf("tritondigital makeBids no ad (id: %v)\n", internalRequest.ID)
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("No Ads in VAST response"),
 		}}
@@ -199,6 +201,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 
 	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
 	if err != nil {
+		fmt.Printf("tritondigital makeBids couldn't parse CPM (id: %v)\n", internalRequest.ID)
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("Couldn't parse CPM"),
 		}}
