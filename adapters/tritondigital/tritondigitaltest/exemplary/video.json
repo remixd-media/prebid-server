@@ -7,7 +7,7 @@
       "IAB8-18"
     ],
     "user": {
-      "buyeruid": "user-101",
+      "buyeruid": "{\"aaa-uid\":\"112233\",\"bbb-uid\":\"445566\",\"ccc-uid\":\"778899\"}",
       "yob": 1973
     },
     "device": {
@@ -60,7 +60,7 @@
     {
       "expectedRequest": {
         "method": "GET",
-        "uri": "https://tritondigitalmock.example.com/ondemand/ars?at=audio&banners=300x250&fmt=vast&iab-categories-to-exclude=IAB25%2CIAB7-39%2CIAB8-18&maxbr=1500&maxdur=30&minbr=300&mindur=5&referrer=http%3A%2F%2Fexample.com%2Fpage-1&stid=12345&type=preroll&ua=my-user-agent&version=1.6.9&yob=1973",
+        "uri": "https://tritondigitalmock.example.com/ondemand/ars?aaa-uid=112233&acodec=mp3&at=audio&banners=300x250&bbb-uid=445566&ccc-uid=778899&cntnr=mp3&fmt=vast&iab-categories-to-exclude=IAB25%2CIAB7-39%2CIAB8-18&maxbr=1500&maxdur=30&minbr=300&mindur=5&referrer=http%3A%2F%2Fexample.com%2Fpage-1&site-url=http%3A%2F%2Fexample.com%2Fpage-1&stid=12345&type=preroll&ua=my-user-agent&version=1.7.4&yob=1973",
         "headers": {
           "Pbs-Imp-Id": [
             "test-imp-id"

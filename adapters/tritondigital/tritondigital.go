@@ -41,7 +41,7 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		}
 
 		params := url.Values{}
-		params.Add("version", "1.6.9")
+		params.Add("version", "1.7.4")
 
 		var adType string
 		/*	if imp.Video.StartDelay != nil && *imp.Video.StartDelay != 0 {
@@ -72,11 +72,26 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		if request.Site != nil {
 			if request.Site.Page != "" {
 				params.Add("referrer", request.Site.Page)
+				params.Add("site-url", request.Site.Page)
 			}
 		}
 
 		if request.User != nil {
 			if request.User.BuyerUID != "" {
+				tritonParterUIDMap := map[string]string{}
+
+				err := json.Unmarshal([]byte(request.User.BuyerUID), &tritonParterUIDMap)
+				if err != nil {
+					fmt.Printf("tritondigital makerequests parser buyeruid: %s err: %v\n", request.User.BuyerUID, err)
+				} else {
+					for k, v := range tritonParterUIDMap {
+						if strings.HasSuffix(k, "-uid") {
+							params.Add(k, v)
+						}
+					}
+				}
+
+				// old usage from cookie sync in 1.6.9
 				//params.Add("lsid", request.User.BuyerUID)
 			}
 
@@ -116,6 +131,8 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		}
 
 		params.Add("at", "audio")
+		params.Add("cntnr", "mp3")
+		params.Add("acodec", "mp3")
 		params.Add("fmt", "vast")
 		params.Add("banners", impExt.Banners)
 		params.Add("stid", impExt.StID)
