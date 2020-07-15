@@ -82,7 +82,7 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 
 				err := json.Unmarshal([]byte(request.User.BuyerUID), &tritonParterUIDMap)
 				if err != nil {
-					fmt.Printf("tritondigital makerequests parser buyeruid: %s err: %v\n", request.User.BuyerUID, err)
+					fmt.Printf("tritondigital makerequests parse buyeruid: %s err: %v\n", request.User.BuyerUID, err)
 				} else {
 					for k, v := range tritonParterUIDMap {
 						if strings.HasSuffix(k, "-uid") {
@@ -141,9 +141,12 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
+		reqURL := adapter.URI + "?" + params.Encode()
+		fmt.Printf("tritondigital makerequests reqUrl: %s\n", reqURL)
+
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
-			Uri:     adapter.URI + "?" + params.Encode(),
+			Uri:     reqURL,
 			Headers: headers,
 		}
 
