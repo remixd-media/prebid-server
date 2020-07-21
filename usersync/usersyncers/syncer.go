@@ -11,6 +11,7 @@ import (
 	"github.com/prebid/prebid-server/adapters/adkernelAdn"
 	"github.com/prebid/prebid-server/adapters/admixer"
 	"github.com/prebid/prebid-server/adapters/adpone"
+	"github.com/prebid/prebid-server/adapters/adswizz"
 	"github.com/prebid/prebid-server/adapters/adtelligent"
 	"github.com/prebid/prebid-server/adapters/advangelists"
 	"github.com/prebid/prebid-server/adapters/appnexus"
@@ -122,6 +123,7 @@ func NewSyncerMap(cfg *config.Configuration) map[openrtb_ext.BidderName]usersync
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderYieldmo, yieldmo.NewYieldmoSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderZeroClickFraud, zeroclickfraud.NewZeroClickFraudSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderTritonDigital, tritondigital.NewTritonDigitalSyncer)
+	insertIntoMap(cfg, syncers, openrtb_ext.BidderAdsWizz, adswizz.NewAdsWizzSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderBidSwitch, bidswitch.NewBidSwitchSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderDistrictM, districtm.NewDistrictMSyncer)
 

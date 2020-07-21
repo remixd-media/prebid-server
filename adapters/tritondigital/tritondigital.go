@@ -132,7 +132,7 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 
 		params.Add("at", "audio")
 		params.Add("cntnr", "mp3")
-		params.Add("acodec", "mp3")
+		params.Add("acodec", "mp3,aac_hev1,aac_hev2,aac_lc")
 		params.Add("fmt", "vast")
 		params.Add("banners", impExt.Banners)
 		params.Add("stid", impExt.StID)
