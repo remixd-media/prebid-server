@@ -100,9 +100,11 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			}
 		}
 
+		reqURL := adapter.URI + "/" + impExt.Alias + "?" + params.Encode()
+		fmt.Printf("adswizz makerequests reqUrl: %s\n", reqURL)
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
-			Uri:     adapter.URI + "/" + impExt.Alias + "?" + params.Encode(),
+			Uri:     reqURL,
 			Headers: headers,
 		}
 
