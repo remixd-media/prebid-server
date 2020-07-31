@@ -44,7 +44,7 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 		params := url.Values{}
 
 		// id md5 as cachebuster
-		cb := fmt.Sprintf("%x", md5.Sum([]byte(imp.ID)))[:8]
+		cb := fmt.Sprintf("%x", md5.Sum([]byte(request.ID+"-"+imp.ID)))[:8]
 		params.Add("cb", cb)
 
 		if imp.Video.MaxDuration > 0 {
