@@ -75,7 +75,7 @@
             "1.2.3.4"
           ]
         },
-        "uri": "https://mock.deliveryengine.adswizz.com/vast/4.0/request/alias/?aw_0_1st.age=47&cat_exclude=IAB25%2CIAB7-39%2CIAB8-18&cb=dd418744&duration=30000&listenerId=user-101"
+        "uri": "https://mock.deliveryengine.adswizz.com/vast/4.0/request/alias/?aw_0_1st.age=47&aw_0_azn.pgenre=%5B%22Arts%22%2C%22Business%22%2C%22Comedy%22%2C%22Education%22%2C%22Fiction%22%2C%22Government%22%2C%22History%22%2C%22Health%22%2C%22Kids+%26+Family%22%2C%22Leisure%22%2C%22Music%22%2C%22News%22%2C%22Religion+%26+Spirituality%22%2C%22Science%22%2C%22Society+%26+Culture%22%2C%22Sports%22%2C%22Technology%22%2C%22True+Crime%22%2C%22TV+%26+Film%22%2C%22Politics%22%5D&cat_exclude=IAB25%2CIAB7-39%2CIAB8-18&cat_include=IAB1%2CIAB2%2CIAB3%2CIAB5%2CIAB6%2CIAB8%2CIAB7%2CIAB9%2CIAB10%2CIAB11%2CIAB12%2CIAB13%2CIAB16%2CIAB21%2CIAB23%2CIAB15%2CIAB22%2CIAB14%2CIAB17%2CIAB18%2CIAB19%2CIAB20&cb=dd418744&duration=30000&listenerId=user-101"
       },
       "mockResponse": {
         "status": 200,
