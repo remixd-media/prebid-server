@@ -55,12 +55,6 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			params.Add("cat_exclude", strings.Join(request.BCat, ","))
 		}
 
-		// include all categories
-		params.Add("cat_include", "IAB1,IAB2,IAB3,IAB5,IAB6,IAB8,IAB7,IAB9,IAB10,IAB11,IAB12,IAB13,IAB16,IAB21,IAB23,IAB15,IAB22,IAB14,IAB17,IAB18,IAB19,IAB20")
-
-		// include all genres
-		params.Add("aw_0_azn.pgenre", `["Arts","Business","Comedy","Education","Fiction","Government","History","Health","Kids & Family","Leisure","Music","News","Religion & Spirituality","Science","Society & Culture","Sports","Technology","True Crime","TV & Film","Politics"]`)
-
 		if request.User != nil {
 
 			if request.User.BuyerUID != "" {
