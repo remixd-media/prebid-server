@@ -81,6 +81,10 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			}
 		}
 
+		if impExt.PName != "" {
+			params.Add("aw_0_azn.pname", impExt.PName)
+		}
+
 		headers := http.Header{}
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
