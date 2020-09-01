@@ -47,6 +47,10 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 		cb := fmt.Sprintf("%x", md5.Sum([]byte(request.ID+"-"+imp.ID)))[:8]
 		params.Add("cb", cb)
 
+		if impExt.Pname != "" {
+			params.Add("aw_0_azn.pname", impExt.Pname)
+		}
+
 		if imp.Video.MaxDuration > 0 {
 			params.Add("duration", fmt.Sprintf("%d", imp.Video.MaxDuration*1000))
 		}
