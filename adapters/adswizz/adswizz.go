@@ -81,14 +81,12 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			}
 		}
 
-		//	Temp disabled until pname parameter impressions are fixed
-		/*
 		if impExt.PName != "" {
 			fmt.Printf("pname param: %s\n", impExt.PName)
 			params.Add("aw_0_azn.pname", impExt.PName)
 		} else {
 			fmt.Printf("no pname param\n")
-		}*/
+		}
 
 		headers := http.Header{}
 		// set imp id to be able to match it against bid
