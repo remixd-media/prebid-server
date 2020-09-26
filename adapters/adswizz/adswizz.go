@@ -81,6 +81,15 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			}
 		}
 
+		if request.Device != nil && request.Device.Geo != nil {
+			params.Add("lat", fmt.Sprintf("%.4f", request.Device.Geo.Lat))
+			params.Add("lon", fmt.Sprintf("%.4f", request.Device.Geo.Lon))
+
+			if request.Device.Geo.Country != "" {
+				params.Add("aw_0_azn.pcountry", request.Device.Geo.Country)
+			}
+		}
+
 		if impExt.PName != "" {
 			fmt.Printf("pname param: %s\n", impExt.PName)
 			params.Add("aw_0_azn.pname", impExt.PName)
