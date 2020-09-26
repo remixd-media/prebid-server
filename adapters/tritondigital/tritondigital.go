@@ -163,6 +163,8 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			Headers: headers,
 		}
 
+		fmt.Printf("triton makerequests jsonBody: %s\n", string(reqData.Body))
+
 		requests = append(requests, &reqData)
 	}
 
