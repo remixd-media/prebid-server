@@ -1,7 +1,6 @@
-package adswizz
+package wideorbit
 
 import (
-	"crypto/md5"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -17,11 +16,11 @@ import (
 	"github.com/prebid/prebid-server/openrtb_ext"
 )
 
-type AdsWizzAdapter struct {
+type WideOrbitAdapter struct {
 	URI string
 }
 
-func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
+func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
 	numImps := len(request.Imp)
 
 	requests := []*adapters.RequestData{}
@@ -43,32 +42,63 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 
 		params := url.Values{}
 
-		// id md5 as cachebuster
-		cb := fmt.Sprintf("%x", md5.Sum([]byte(request.ID+"-"+imp.ID)))[:8]
-		params.Add("cb", cb)
+		isDeviceValid := request.Device != nil && request.Device.UA != "" && request.Device.IP != ""
+		isPlacementIdValid := impExt.PlacementId != ""
+		isVideoValid := imp.Video != nil &&
+			imp.Video.MinBitRate > 0 && imp.Video.MaxBitRate > 0 &&
+			imp.Video.MIMEs != nil && len(imp.Video.MIMEs) > 0 &&
+			imp.Video.Protocols != nil && len(imp.Video.Protocols) > 0
 
-		if imp.Video.MaxDuration > 0 {
-			params.Add("duration", fmt.Sprintf("%d", imp.Video.MaxDuration*1000))
+		if !isDeviceValid {
+			errors = append(errors, fmt.Errorf("invalid input parameters - device not valid"))
+			continue
+		}
+		if !isPlacementIdValid {
+			errors = append(errors, fmt.Errorf("invalid input parameters - placementId not valid"))
+			continue
+		}
+		if !isVideoValid {
+			errors = append(errors, fmt.Errorf("invalid input parameters - video not valid"))
+			continue
 		}
 
+		//required
+		params.Add("uas", request.Device.UA)
+		params.Add("uip", request.Device.IP)
+		params.Add("pId", impExt.PlacementId)
+		params.Add("minbr", fmt.Sprintf("%d", imp.Video.MinBitRate))
+		params.Add("maxbr", fmt.Sprintf("%d", imp.Video.MaxBitRate))
+		params.Add("mimes", strings.Join(imp.Video.MIMEs, ","))
+		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(imp.Video.Protocols)), ","), "[]"))
+
+		//URL of the webpage/station the ad is played on. For in app requests, this should be aliased to the top level domain of the station’s website.
+		params.Add("url", request.Site.Page)
+
+		//optional
+		params.Add("delay", "-1") //-1 is generic midroll todo preroll
+		params.Add("lmt", "0")    //limit ad tracking
+		if imp.Video.MaxDuration > 0 {
+			params.Add("maxdur", fmt.Sprintf("%d", imp.Video.MaxDuration))
+		}
+		if imp.Video.MinDuration > 0 {
+			params.Add("mindur", fmt.Sprintf("%d", imp.Video.MinDuration))
+		}
 		if len(request.BCat) > 0 {
-			params.Add("cat_exclude", strings.Join(request.BCat, ","))
+			params.Add("bcat", strings.Join(request.BCat, ","))
 		}
 
 		if request.User != nil {
 
 			if request.User.BuyerUID != "" {
-				params.Add("listenerId", request.User.BuyerUID)
+				params.Add("uid", request.User.BuyerUID)
 			}
 
-			if request.User.Gender == "M" {
-				params.Add("aw_0_1st.gender", "male")
-			} else if request.User.Gender == "F" {
-				params.Add("aw_0_1st.gender", "female")
+			if request.User.Gender != "" {
+				params.Add("a_gender", request.User.Gender) //M or F
 			}
 
 			if request.User.Yob > 0 {
-				params.Add("aw_0_1st.age", fmt.Sprintf("%d", time.Now().Year()-int(request.User.Yob)))
+				params.Add("a_age", fmt.Sprintf("%d", time.Now().Year()-int(request.User.Yob)))
 			}
 
 			if request.User.Geo != nil {
@@ -84,37 +114,19 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 		if request.Device != nil && request.Device.Geo != nil {
 			params.Add("lat", fmt.Sprintf("%.4f", request.Device.Geo.Lat))
 			params.Add("lon", fmt.Sprintf("%.4f", request.Device.Geo.Lon))
+		}
 
-			if request.Device.Geo.Country != "" {
-				params.Add("aw_0_azn.pcountry", request.Device.Geo.Country)
+		if request.Site != nil {
+			if request.Site.Ref != "" {
+				params.Add("ref", request.Site.Ref)
 			}
 		}
-
-		if impExt.PName != "" {
-			params.Add("aw_0_azn.pname", impExt.PName)
-		}
-
 		headers := http.Header{}
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
-		if request.Device != nil {
-			if request.Device.UA != "" {
-				headers.Set("User-Agent", request.Device.UA)
-			}
-			if request.Device.IP != "" {
-				headers.Set("X-Forwarded-For", request.Device.IP)
-			}
-		}
-
-		if request.Site != nil {
-			if request.Site.Page != "" {
-				headers.Set("Referer", request.Site.Page)
-			}
-		}
-
-		reqURL := adapter.URI + "/" + impExt.Alias + "?" + params.Encode()
-		fmt.Printf("adswizz makerequests reqUrl: %s\n", reqURL)
+		reqURL := adapter.URI + "&" + params.Encode()
+		fmt.Printf("wideorbit makerequests reqUrl: %s\n", reqURL)
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
 			Uri:     reqURL,
@@ -131,7 +143,7 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 	return requests, nil
 }
 
-func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpAdsWizz, error) {
+func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpWideOrbit, error) {
 	var bidderExt adapters.ExtImpBidder
 
 	if err := json.Unmarshal(imp.Ext, &bidderExt); err != nil {
@@ -140,7 +152,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpAdsWizz, error) {
 		}
 	}
 
-	impExt := openrtb_ext.ExtImpAdsWizz{}
+	impExt := openrtb_ext.ExtImpWideOrbit{}
 	err := json.Unmarshal(bidderExt.Bidder, &impExt)
 	if err != nil {
 		return nil, &errortypes.BadInput{
@@ -151,7 +163,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpAdsWizz, error) {
 	return &impExt, nil
 }
 
-func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
@@ -218,8 +230,8 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 	return bidderResponse, nil
 }
 
-func NewAdsWizzBidder(endpoint string) *AdsWizzAdapter {
-	return &AdsWizzAdapter{
+func NewWideOrbitBidder(endpoint string) *WideOrbitAdapter {
+	return &WideOrbitAdapter{
 		URI: endpoint,
 	}
 }

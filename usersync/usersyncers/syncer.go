@@ -1,6 +1,7 @@
 package usersyncers
 
 import (
+	"github.com/prebid/prebid-server/adapters/wideorbit"
 	"strings"
 	"text/template"
 
@@ -124,6 +125,7 @@ func NewSyncerMap(cfg *config.Configuration) map[openrtb_ext.BidderName]usersync
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderZeroClickFraud, zeroclickfraud.NewZeroClickFraudSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderTritonDigital, tritondigital.NewTritonDigitalSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderAdsWizz, adswizz.NewAdsWizzSyncer)
+	insertIntoMap(cfg, syncers, openrtb_ext.BidderWideOrbit, wideorbit.NewWideOrbitSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderBidSwitch, bidswitch.NewBidSwitchSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderDistrictM, districtm.NewDistrictMSyncer)
 
