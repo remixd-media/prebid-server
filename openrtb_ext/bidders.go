@@ -82,6 +82,7 @@ const (
 	BidderBidSwitch        BidderName = "bidswitch"
 	BidderDistrictM        BidderName = "districtm"
 	BidderWideOrbit        BidderName = "wideorbit"
+	BidderDax              BidderName = "dax"
 )
 
 // BidderMap stores all the valid OpenRTB 2.x Bidders in the project. This map *must not* be mutated.
@@ -148,6 +149,7 @@ var BidderMap = map[string]BidderName{
 	"bidswitch":         BidderBidSwitch,
 	"districtm":         BidderDistrictM,
 	"wideorbit":         BidderWideOrbit,
+	"dax":               BidderDax,
 }
 
 // BidderList returns the values of the BidderMap

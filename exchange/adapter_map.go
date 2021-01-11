@@ -2,6 +2,7 @@ package exchange
 
 import (
 	"fmt"
+	"github.com/prebid/prebid-server/adapters/dax"
 	"github.com/prebid/prebid-server/adapters/wideorbit"
 	"net/http"
 	"strings"
@@ -145,6 +146,7 @@ func newAdapterMap(client *http.Client, cfg *config.Configuration, infos adapter
 		openrtb_ext.BidderBidSwitch:        bidswitch.NewBidSwitchBidder(cfg.Adapters[string(openrtb_ext.BidderBidSwitch)].Endpoint),
 		openrtb_ext.BidderDistrictM:        districtm.NewDistrictMBidder(cfg.Adapters[string(openrtb_ext.BidderDistrictM)].Endpoint),
 		openrtb_ext.BidderWideOrbit:        wideorbit.NewWideOrbitBidder(cfg.Adapters[string(openrtb_ext.BidderWideOrbit)].Endpoint),
+		openrtb_ext.BidderDax:              dax.NewDaxBidder(cfg.Adapters[string(openrtb_ext.BidderDax)].Endpoint),
 	}
 
 	legacyBidders := map[openrtb_ext.BidderName]adapters.Adapter{

@@ -1,4 +1,4 @@
-package wideorbit
+package dax
 
 import (
 	"encoding/json"
@@ -16,11 +16,11 @@ import (
 	"github.com/prebid/prebid-server/openrtb_ext"
 )
 
-type WideOrbitAdapter struct {
+type DaxAdapter struct {
 	URI string
 }
 
-func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
+func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
 	numImps := len(request.Imp)
 
 	requests := []*adapters.RequestData{}
@@ -34,7 +34,7 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 			continue
 		}
 
-		impExt, err := parseExt(&imp)
+		_, err := parseExt(&imp) //it may be used in future
 		if err != nil {
 			errors = append(errors, err)
 			continue
@@ -42,63 +42,34 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 
 		params := url.Values{}
 
-		isDeviceValid := request.Device != nil && request.Device.UA != "" && request.Device.IP != ""
-		isPlacementIdValid := impExt.PlacementId != ""
-		isAudioValid := imp.Audio != nil &&
-			imp.Audio.MinBitrate > 0 && imp.Audio.MaxBitrate > 0 &&
-			imp.Audio.MIMEs != nil && len(imp.Audio.MIMEs) > 0 &&
-			imp.Audio.Protocols != nil && len(imp.Audio.Protocols) > 0
+		params.Add("sd", "0") //preroll hardcode todo pass as param
 
-		if !isDeviceValid {
-			errors = append(errors, fmt.Errorf("invalid input parameters - device not valid"))
-			continue
-		}
-		if !isPlacementIdValid {
-			errors = append(errors, fmt.Errorf("invalid input parameters - placementId not valid"))
-			continue
-		}
-		if !isAudioValid {
-			errors = append(errors, fmt.Errorf("invalid input parameters - audio not valid"))
-			continue
-		}
-
-		//required
-		params.Add("uas", request.Device.UA)
-		params.Add("uip", request.Device.IP)
-		params.Add("pId", impExt.PlacementId)
-		params.Add("minbr", fmt.Sprintf("%d", imp.Audio.MinBitrate))
-		params.Add("maxbr", fmt.Sprintf("%d", imp.Audio.MaxBitrate))
-		params.Add("mimes", strings.Join(imp.Audio.MIMEs, ","))
-		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(imp.Audio.Protocols)), ","), "[]"))
-
-		//URL of the webpage/station the ad is played on. For in app requests, this should be aliased to the top level domain of the station’s website.
-		params.Add("url", request.Site.Page)
-
-		//optional
-		params.Add("delay", "0") //0 is preroll - todo pass as param
-		params.Add("lmt", "0")   //limit ad tracking
 		if imp.Audio.MaxDuration > 0 {
-			params.Add("maxdur", fmt.Sprintf("%d", imp.Audio.MaxDuration))
+			params.Add("dur_max", fmt.Sprintf("%d", imp.Audio.MaxDuration*1000))
 		}
+
 		if imp.Audio.MinDuration > 0 {
-			params.Add("mindur", fmt.Sprintf("%d", imp.Audio.MinDuration))
+			params.Add("dur_min", fmt.Sprintf("%d", imp.Audio.MinBitrate*1000))
 		}
+
 		if len(request.BCat) > 0 {
-			params.Add("bcat", strings.Join(request.BCat, ","))
+			params.Add("bcat", strings.Join(request.BCat, ";"))
 		}
 
 		if request.User != nil {
 
 			if request.User.BuyerUID != "" {
-				params.Add("uid", request.User.BuyerUID)
+				params.Add("dax_listenerId", request.User.BuyerUID)
 			}
 
-			if request.User.Gender != "" {
-				params.Add("a_gender", request.User.Gender) //M or F
+			if request.User.Gender == "M" {
+				params.Add("gender", "male")
+			} else if request.User.Gender == "F" {
+				params.Add("gender", "female")
 			}
 
 			if request.User.Yob > 0 {
-				params.Add("a_age", fmt.Sprintf("%d", time.Now().Year()-int(request.User.Yob)))
+				params.Add("age", fmt.Sprintf("%d", time.Now().Year()-int(request.User.Yob)))
 			}
 
 			if request.User.Geo != nil {
@@ -116,17 +87,27 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 			params.Add("lon", fmt.Sprintf("%.4f", request.Device.Geo.Lon))
 		}
 
-		if request.Site != nil {
-			if request.Site.Ref != "" {
-				params.Add("ref", request.Site.Ref)
-			}
-		}
 		headers := http.Header{}
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
+		if request.Device != nil {
+			if request.Device.UA != "" {
+				headers.Set("User-Agent", request.Device.UA)
+			}
+			if request.Device.IP != "" {
+				headers.Set("X-Forwarded-For", request.Device.IP)
+			}
+		}
+
+		if request.Site != nil {
+			if request.Site.Page != "" {
+				headers.Set("Referer", request.Site.Page)
+			}
+		}
+
 		reqURL := adapter.URI + "&" + params.Encode()
-		fmt.Printf("wideorbit makerequests reqUrl: %s\n", reqURL)
+		fmt.Printf("dax makerequests reqUrl: %s\n", reqURL)
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
 			Uri:     reqURL,
@@ -143,7 +124,7 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 	return requests, nil
 }
 
-func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpWideOrbit, error) {
+func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpDax, error) {
 	var bidderExt adapters.ExtImpBidder
 
 	if err := json.Unmarshal(imp.Ext, &bidderExt); err != nil {
@@ -152,7 +133,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpWideOrbit, error) {
 		}
 	}
 
-	impExt := openrtb_ext.ExtImpWideOrbit{}
+	impExt := openrtb_ext.ExtImpDax{}
 	err := json.Unmarshal(bidderExt.Bidder, &impExt)
 	if err != nil {
 		return nil, &errortypes.BadInput{
@@ -163,7 +144,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpWideOrbit, error) {
 	return &impExt, nil
 }
 
-func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+func (adapter *DaxAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
@@ -220,14 +201,14 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 			AdM:   string(response.Body),
 			CrID:  crID,
 		},
-		BidType: openrtb_ext.BidTypeAudio,
+		BidType: openrtb_ext.BidTypeAudio, //not sure why video is used by previous dev, probably due to limitation in pbs
 	})
 
 	return bidderResponse, nil
 }
 
-func NewWideOrbitBidder(endpoint string) *WideOrbitAdapter {
-	return &WideOrbitAdapter{
+func NewDaxBidder(endpoint string) *DaxAdapter {
+	return &DaxAdapter{
 		URI: endpoint,
 	}
 }
