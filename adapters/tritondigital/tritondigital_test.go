@@ -7,6 +7,6 @@ import (
 )
 
 func TestJsonSamples(t *testing.T) {
-	adapterstest.RunJSONBidderTest(t, "tritondigitaltest", NewTritonDigitalBidder("https://tritondigitalmock.example.com/ondemand/ars"))
+	adapterstest.RunJSONBidderTest(t, "tritondigitaltest", &TritonDigitalAdapter{endpoint: "https://tritondigitalmock.example.com/ondemand/ars"})
 	// the extra "" in adm are not reflected in real requests, probably a bug in the testing module
 }

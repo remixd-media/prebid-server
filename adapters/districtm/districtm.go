@@ -3,6 +3,7 @@ package districtm
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/prebid/prebid-server/config"
 	"net/http"
 
 	"github.com/mxmCherry/openrtb"
@@ -12,7 +13,7 @@ import (
 )
 
 type DistrictMAdapter struct {
-	URI string
+	endpoint string
 }
 
 func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
@@ -55,7 +56,7 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 
 	reqData := adapters.RequestData{
 		Method:  http.MethodPost,
-		Uri:     adapter.URI,
+		Uri:     adapter.endpoint,
 		Headers: headers,
 	}
 
@@ -147,8 +148,10 @@ func (adapter *DistrictMAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	return bidderResponse, nil
 }
 
-func NewDistrictMBidder(endpoint string) *DistrictMAdapter {
-	return &DistrictMAdapter{
-		URI: endpoint,
+func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
+	bidder := &DistrictMAdapter{
+		endpoint:    config.Endpoint,
 	}
+	return bidder, nil
 }
+

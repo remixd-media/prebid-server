@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/prebid/prebid-server/config"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -17,7 +18,7 @@ import (
 )
 
 type WideOrbitAdapter struct {
-	URI string
+	endpoint    string
 }
 
 func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
@@ -125,7 +126,7 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
-		reqURL := adapter.URI + "&" + params.Encode()
+		reqURL := adapter.endpoint + "&" + params.Encode()
 		fmt.Printf("wideorbit makerequests reqUrl: %s\n", reqURL)
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
@@ -226,8 +227,9 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	return bidderResponse, nil
 }
 
-func NewWideOrbitBidder(endpoint string) *WideOrbitAdapter {
-	return &WideOrbitAdapter{
-		URI: endpoint,
+func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
+	bidder := &WideOrbitAdapter{
+		endpoint:    config.Endpoint,
 	}
+	return bidder, nil
 }

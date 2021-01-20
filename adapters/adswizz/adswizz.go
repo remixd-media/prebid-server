@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/prebid/prebid-server/config"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -18,7 +19,7 @@ import (
 )
 
 type AdsWizzAdapter struct {
-	URI string
+	endpoint string
 }
 
 func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
@@ -113,7 +114,7 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			}
 		}
 
-		reqURL := adapter.URI + "/" + impExt.Alias + "?" + params.Encode()
+		reqURL := adapter.endpoint + "/" + impExt.Alias + "?" + params.Encode()
 		fmt.Printf("adswizz makerequests reqUrl: %s\n", reqURL)
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
@@ -218,8 +219,10 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 	return bidderResponse, nil
 }
 
-func NewAdsWizzBidder(endpoint string) *AdsWizzAdapter {
-	return &AdsWizzAdapter{
-		URI: endpoint,
+func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
+	bidder := &AdsWizzAdapter{
+		endpoint:    config.Endpoint,
 	}
+	return bidder, nil
 }
+

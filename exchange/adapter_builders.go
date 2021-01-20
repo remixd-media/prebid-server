@@ -16,6 +16,7 @@ import (
 	"github.com/prebid/prebid-server/adapters/adot"
 	"github.com/prebid/prebid-server/adapters/adpone"
 	"github.com/prebid/prebid-server/adapters/adprime"
+	"github.com/prebid/prebid-server/adapters/adswizz"
 	"github.com/prebid/prebid-server/adapters/adtarget"
 	"github.com/prebid/prebid-server/adapters/adtelligent"
 	"github.com/prebid/prebid-server/adapters/advangelists"
@@ -28,6 +29,7 @@ import (
 	"github.com/prebid/prebid-server/adapters/beachfront"
 	"github.com/prebid/prebid-server/adapters/beintoo"
 	"github.com/prebid/prebid-server/adapters/between"
+	"github.com/prebid/prebid-server/adapters/bidswitch"
 	"github.com/prebid/prebid-server/adapters/brightroll"
 	"github.com/prebid/prebid-server/adapters/colossus"
 	"github.com/prebid/prebid-server/adapters/connectad"
@@ -35,7 +37,9 @@ import (
 	"github.com/prebid/prebid-server/adapters/conversant"
 	"github.com/prebid/prebid-server/adapters/cpmstar"
 	"github.com/prebid/prebid-server/adapters/datablocks"
+	"github.com/prebid/prebid-server/adapters/dax"
 	"github.com/prebid/prebid-server/adapters/deepintent"
+	"github.com/prebid/prebid-server/adapters/districtm"
 	"github.com/prebid/prebid-server/adapters/dmx"
 	"github.com/prebid/prebid-server/adapters/emx_digital"
 	"github.com/prebid/prebid-server/adapters/engagebdr"
@@ -83,12 +87,14 @@ import (
 	"github.com/prebid/prebid-server/adapters/telaria"
 	"github.com/prebid/prebid-server/adapters/triplelift"
 	"github.com/prebid/prebid-server/adapters/triplelift_native"
+	"github.com/prebid/prebid-server/adapters/tritondigital"
 	"github.com/prebid/prebid-server/adapters/ucfunnel"
 	"github.com/prebid/prebid-server/adapters/unruly"
 	"github.com/prebid/prebid-server/adapters/valueimpression"
 	"github.com/prebid/prebid-server/adapters/verizonmedia"
 	"github.com/prebid/prebid-server/adapters/visx"
 	"github.com/prebid/prebid-server/adapters/vrtcal"
+	"github.com/prebid/prebid-server/adapters/wideorbit"
 	"github.com/prebid/prebid-server/adapters/yeahmobi"
 	"github.com/prebid/prebid-server/adapters/yieldlab"
 	"github.com/prebid/prebid-server/adapters/yieldmo"
@@ -195,5 +201,11 @@ func newAdapterBuilders() map[openrtb_ext.BidderName]adapters.Builder {
 		openrtb_ext.BidderYieldmo:          yieldmo.Builder,
 		openrtb_ext.BidderYieldone:         yieldone.Builder,
 		openrtb_ext.BidderZeroClickFraud:   zeroclickfraud.Builder,
+		openrtb_ext.BidderWideOrbit:   		wideorbit.Builder,
+		openrtb_ext.BidderAdsWizz:   		adswizz.Builder,
+		openrtb_ext.BidderTritonDigital:    tritondigital.Builder,
+		openrtb_ext.BidderDistrictM:        districtm.Builder,
+		openrtb_ext.BidderDax:              dax.Builder,
+		openrtb_ext.BidderBidSwitch:        bidswitch.Builder,
 	}
 }

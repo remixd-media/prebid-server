@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/prebid/prebid-server/config"
 	"math"
 	"net/http"
 	"net/url"
@@ -17,7 +18,7 @@ import (
 )
 
 type TritonDigitalAdapter struct {
-	URI string
+	endpoint string
 }
 
 func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
@@ -154,7 +155,7 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
-		reqURL := adapter.URI + "?" + params.Encode()
+		reqURL := adapter.endpoint + "?" + params.Encode()
 		fmt.Printf("tritondigital makerequests reqUrl: %s\n", reqURL)
 
 		reqData := adapters.RequestData{
@@ -282,11 +283,13 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	return bidderResponse, nil
 }
 
-func NewTritonDigitalBidder(endpoint string) *TritonDigitalAdapter {
-	return &TritonDigitalAdapter{
-		URI: endpoint,
+func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
+	bidder := &TritonDigitalAdapter{
+		endpoint:    config.Endpoint,
 	}
+	return bidder, nil
 }
+
 
 // iab conv map v1 => v2
 var iabConvMap = map[string]string{

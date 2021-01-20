@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
+	"github.com/prebid/prebid-server/config"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -17,7 +18,7 @@ import (
 )
 
 type BidSwitchAdapter struct {
-	URI string
+	endpoint string
 }
 
 func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
@@ -50,7 +51,7 @@ func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 
 	reqData := adapters.RequestData{
 		Method:  http.MethodPost,
-		Uri:     adapter.URI,
+		Uri:     adapter.endpoint,
 		Headers: headers,
 	}
 
@@ -134,8 +135,10 @@ func (adapter *BidSwitchAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	return bidderResponse, nil
 }
 
-func NewBidSwitchBidder(endpoint string) *BidSwitchAdapter {
-	return &BidSwitchAdapter{
-		URI: endpoint,
+func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
+	bidder := &BidSwitchAdapter{
+		endpoint:    config.Endpoint,
 	}
+	return bidder, nil
 }
+

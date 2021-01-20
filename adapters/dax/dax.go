@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/prebid/prebid-server/config"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -17,7 +18,7 @@ import (
 )
 
 type DaxAdapter struct {
-	URI string
+	endpoint string
 }
 
 func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
@@ -106,7 +107,7 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *ad
 			}
 		}
 
-		reqURL := adapter.URI + "&" + params.Encode()
+		reqURL := adapter.endpoint + "&" + params.Encode()
 		fmt.Printf("dax makerequests reqUrl: %s\n", reqURL)
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
@@ -207,8 +208,10 @@ func (adapter *DaxAdapter) MakeBids(internalRequest *openrtb.BidRequest, externa
 	return bidderResponse, nil
 }
 
-func NewDaxBidder(endpoint string) *DaxAdapter {
-	return &DaxAdapter{
-		URI: endpoint,
+func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
+	bidder := &DaxAdapter{
+		endpoint:    config.Endpoint,
 	}
+	return bidder, nil
 }
+

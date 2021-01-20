@@ -7,6 +7,6 @@ import (
 )
 
 func TestJsonSamples(t *testing.T) {
-	adapterstest.RunJSONBidderTest(t, "daxtest", NewDaxBidder("https://mock.com?cid=123"))
+	adapterstest.RunJSONBidderTest(t, "daxtest", &DaxAdapter{endpoint: "https://mock.com?cid=123"})
 	// the extra "" in adm are not reflected in real requests, probably a bug in the testing module
 }

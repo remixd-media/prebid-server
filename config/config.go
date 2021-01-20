@@ -645,6 +645,7 @@ func (cfg *Configuration) setDerivedDefaults() {
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderBidSwitch, "https://x.bidswitch.net/sync?ssp=rax20")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderDistrictM, "https://cdn.districtm.io/ids/?sellerid=101977")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderRubicon, "https://secure-assets.rubiconproject.com/utils/xapi/multi-sync.html?p=22106&endpoint=us-east")
+	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderTritonDigital, "http://playerservices.live.streamtheworld.com/api/getuuid?redir="+url.QueryEscape(externalURL)+"%2Fsetuid%3Fbidder%3Dtritondigital%26uid%3D@UUID@")
 }
 
 func setDefaultUsersync(m map[string]Adapter, bidder openrtb_ext.BidderName, defaultValue string) {
