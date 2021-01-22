@@ -18,7 +18,7 @@ import (
 )
 
 type WideOrbitAdapter struct {
-	endpoint    string
+	endpoint string
 }
 
 func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
@@ -112,9 +112,11 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 			}
 		}
 
-		if request.Device != nil && request.Device.Geo != nil {
-			params.Add("lat", fmt.Sprintf("%.4f", request.Device.Geo.Lat))
-			params.Add("lon", fmt.Sprintf("%.4f", request.Device.Geo.Lon))
+		if request.Device != nil {
+			if request.Device.Geo != nil {
+				params.Add("lat", fmt.Sprintf("%.4f", request.Device.Geo.Lat))
+				params.Add("lon", fmt.Sprintf("%.4f", request.Device.Geo.Lon))
+			}
 		}
 
 		if request.Site != nil {
@@ -122,7 +124,16 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 				params.Add("ref", request.Site.Ref)
 			}
 		}
+
 		headers := http.Header{}
+
+		//wideorbit requires accept language parameter to be set in the following way (required)
+		if request.Device != nil && request.Device.Language != "" {
+			headers.Set("Accept-Language", "HTTP_ACCEPT_LANGUAGE="+request.Device.Language)
+		} else {
+			headers.Set("Accept-Language", "HTTP_ACCEPT_LANGUAGE=en")
+		}
+
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
@@ -227,9 +238,16 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	return bidderResponse, nil
 }
 
+// Adding header fields to request header
+func addHeaderIfNonEmpty(headers http.Header, headerName string, headerValue string) {
+	if len(headerValue) > 0 {
+		headers.Add(headerName, headerValue)
+	}
+}
+
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &WideOrbitAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
