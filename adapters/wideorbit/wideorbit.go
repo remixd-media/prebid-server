@@ -1,6 +1,7 @@
 package wideorbit
 
 import (
+	"bytes"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -138,7 +139,7 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		headers.Set("PBS-IMP-ID", imp.ID)
 
 		reqURL := adapter.endpoint + "&" + params.Encode()
-		fmt.Printf("wideorbit makerequests reqUrl: %s\n", reqURL)
+		fmt.Printf("wideorbit makerequests reqUrl: %s headers=%s\n", reqURL, headersToString(headers))
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
 			Uri:     reqURL,
@@ -250,4 +251,13 @@ func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters
 		endpoint: config.Endpoint,
 	}
 	return bidder, nil
+}
+
+
+func headersToString(m map[string][]string) string {
+	b := new(bytes.Buffer)
+	for key, value := range m {
+		fmt.Fprintf(b, "%s=%s", key, strings.Join(value, ","))
+	}
+	return b.String()
 }
