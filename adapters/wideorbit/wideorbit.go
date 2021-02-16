@@ -139,7 +139,13 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		headers.Set("PBS-IMP-ID", imp.ID)
 
 		reqURL := adapter.endpoint + "&" + params.Encode()
-		fmt.Printf("wideorbit makerequests reqUrl: %s headers=%s\n", reqURL, headersToString(headers))
+
+		pubId := ""
+		if request.Site != nil && request.Site.Publisher != nil {
+			pubId = request.Site.Publisher.ID
+		}
+
+		fmt.Printf("wideorbit makerequests reqUrl: %s pubId=%s headers=%s\n", reqURL, pubId, headersToString(headers))
 		reqData := adapters.RequestData{
 			Method:  http.MethodGet,
 			Uri:     reqURL,
@@ -252,7 +258,6 @@ func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters
 	}
 	return bidder, nil
 }
-
 
 func headersToString(m map[string][]string) string {
 	b := new(bytes.Buffer)
