@@ -43,7 +43,24 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *ad
 
 		params := url.Values{}
 
-		params.Add("sd", "0") //preroll hardcode todo pass as param
+		//preroll
+		sd := "0"
+		if imp.Audio.StartDelay != nil {
+			delay := *imp.Audio.StartDelay
+			if delay == openrtb.StartDelayGenericMidRoll || delay > 0 {
+				//midroll
+				sd = "-1"
+			} else if delay == openrtb.StartDelayGenericPostRoll {
+				//postroll
+				sd = "-2"
+			}
+		}
+
+		params.Add("sd", sd)
+
+		if imp.Audio.Feed == openrtb.FeedTypePodcast {
+			params.Add("feed_type", "3")
+		}
 
 		if imp.Audio.MaxDuration > 0 {
 			params.Add("dur_max", fmt.Sprintf("%d", imp.Audio.MaxDuration*1000))
@@ -105,6 +122,16 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *ad
 			if request.Site.Page != "" {
 				headers.Set("Referer", request.Site.Page)
 			}
+			if request.Site.Content != nil {
+				content := request.Site.Content
+				if len(content.Cat) != 0 {
+					params.Add("cat", strings.Join(content.Cat, ";"))
+				}
+				if content.Genre != "" {
+					params.Add("genre", content.Genre)
+				}
+			}
+
 		}
 
 		reqURL := adapter.endpoint + "&" + params.Encode()
@@ -210,8 +237,7 @@ func (adapter *DaxAdapter) MakeBids(internalRequest *openrtb.BidRequest, externa
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &DaxAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
-

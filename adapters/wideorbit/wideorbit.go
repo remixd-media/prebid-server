@@ -76,9 +76,16 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		//URL of the webpage/station the ad is played on. For in app requests, this should be aliased to the top level domain of the station’s website.
 		params.Add("url", request.Site.Page)
 
-		//optional
-		params.Add("delay", "0") //0 is preroll - todo pass as param
-		params.Add("lmt", "0")   //limit ad tracking
+		delay := "0"
+		if imp.Audio.StartDelay != nil {
+			delay = fmt.Sprint(*imp.Audio.StartDelay)
+		}
+		params.Add("delay", delay) //0 is preroll - todo pass as param
+		if imp.Audio.Feed == openrtb.FeedTypePodcast {
+			params.Add("feed", "4")
+		}
+
+		params.Add("lmt", "0") //limit ad tracking
 		if imp.Audio.MaxDuration > 0 {
 			params.Add("maxdur", fmt.Sprintf("%d", imp.Audio.MaxDuration))
 		}
@@ -123,6 +130,13 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		if request.Site != nil {
 			if request.Site.Ref != "" {
 				params.Add("ref", request.Site.Ref)
+			}
+			if request.Site.Content != nil {
+				content := *request.Site.Content
+				if content.Genre != "" {
+					params.Add("genre", content.Genre)
+				}
+
 			}
 		}
 

@@ -112,6 +112,14 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			if request.Site.Page != "" {
 				headers.Set("Referer", request.Site.Page)
 			}
+			//TODO see about genre, looks like only music genres are supported
+			if request.Site.Content != nil && len(request.Site.Content.Cat) != 0 {
+				params.Add("cat_include", strings.Join(request.Site.Content.Cat, ","))
+			}
+		}
+
+		if imp.Audio != nil && imp.Audio.Feed == openrtb.FeedTypePodcast {
+			params.Add("aw_0_azn.ptype", "Podcast")
 		}
 
 		reqURL := adapter.endpoint + "/" + impExt.Alias + "?" + params.Encode()
@@ -221,8 +229,7 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &AdsWizzAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
-

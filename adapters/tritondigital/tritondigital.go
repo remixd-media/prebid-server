@@ -44,12 +44,13 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		params := url.Values{}
 		params.Add("version", "1.7.4")
 
-		var adType string
-		/*	if imp.Video.StartDelay != nil && *imp.Video.StartDelay != 0 {
-			adType = "midroll"
-		} else {*/
-		adType = "preroll"
-		//		}
+		adType := "preroll"
+		if imp.Video.StartDelay != nil {
+			delay := *imp.Video.StartDelay
+			if delay == openrtb.StartDelayGenericMidRoll || delay > 0 {
+				adType = "midroll"
+			}
+		}
 		params.Add("type", adType)
 
 		if imp.Video.MinDuration > 0 {
@@ -77,6 +78,10 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			}
 
 			catsV1 := request.Site.Cat
+			//TODO should content cats have priority over site cats? Docs say "Category of the content"
+			if len(catsV1) == 0 && request.Site.Content != nil {
+				catsV1 = request.Site.Content.Cat
+			}
 			// convert iab categories to v2 ids
 			catsV2 := ""
 			for _, cat := range catsV1 {
@@ -141,6 +146,13 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			}
 			if request.Device.IP != "" {
 				params.Add("ip", request.Device.IP)
+			}
+		}
+
+		if imp.Audio != nil {
+			audio := *imp.Audio
+			if audio.Feed == openrtb.FeedTypePodcast {
+				params.Add("feed-type", "podcast")
 			}
 		}
 
@@ -285,11 +297,10 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &TritonDigitalAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
-
 
 // iab conv map v1 => v2
 var iabConvMap = map[string]string{
