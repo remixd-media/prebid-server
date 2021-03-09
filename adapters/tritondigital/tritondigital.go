@@ -71,28 +71,36 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			params.Add("iab-categories-to-exclude", strings.Join(request.BCat, ","))
 		}
 
+		var catsV1 []string
+		if request.App != nil {
+			if request.App.Content != nil {
+				catsV1 = request.App.Content.Cat
+			}
+		}
+
 		if request.Site != nil {
 			if request.Site.Page != "" {
 				params.Add("referrer", request.Site.Page)
 				params.Add("site-url", request.Site.Page)
 			}
 
-			catsV1 := request.Site.Cat
-			//TODO should content cats have priority over site cats? Docs say "Category of the content"
-			if len(catsV1) == 0 && request.Site.Content != nil {
+			if request.Site.Content != nil && len(request.Site.Content.Cat) > 0 {
 				catsV1 = request.Site.Content.Cat
+			} else {
+				catsV1 = request.Site.Cat
 			}
-			// convert iab categories to v2 ids
-			catsV2 := ""
-			for _, cat := range catsV1 {
-				if catV2, ok := iabConvMap[cat]; ok {
-					catsV2 += catV2 + ","
-				}
+		}
+
+		// convert iab categories to v2 ids
+		catsV2 := ""
+		for _, cat := range catsV1 {
+			if catV2, ok := iabConvMap[cat]; ok {
+				catsV2 += catV2 + ","
 			}
-			catsV2 = strings.TrimSuffix(catsV2, ",")
-			if catsV2 != "" {
-				params.Add("iab-v2-cat", catsV2)
-			}
+		}
+		catsV2 = strings.TrimSuffix(catsV2, ",")
+		if catsV2 != "" {
+			params.Add("iab-v2-cat", catsV2)
 		}
 
 		if request.User != nil {
