@@ -17,7 +17,7 @@
     "imp": [
       {
         "id": "test-imp-id",
-        "video": {
+        "audio": {
           "startdelay": 0,
           "minduration": 5,
           "maxduration": 30,
@@ -96,7 +96,7 @@
             "id": "AdswizzAd72745",
             "impid": ""
           },
-          "type": "video"
+          "type": "audio"
         }
       ]
     }
