@@ -8,5 +8,5 @@ import (
 )
 
 func NewDaxSyncer(temp *template.Template) usersync.Usersyncer {
-	return adapters.NewSyncer("dax", 0, temp, adapters.SyncTypeRedirect)
+	return adapters.NewSyncer("dax", 0, temp, adapters.SyncTypeIframe)
 }
