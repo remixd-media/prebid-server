@@ -1,12 +1,20 @@
 package dax
 
 import (
+	"github.com/prebid/prebid-server/config"
+	"github.com/prebid/prebid-server/openrtb_ext"
 	"testing"
 
 	"github.com/prebid/prebid-server/adapters/adapterstest"
 )
 
 func TestJsonSamples(t *testing.T) {
-	adapterstest.RunJSONBidderTest(t, "daxtest", &DaxAdapter{endpoint: "https://mock.com?cid=123"})
-	// the extra "" in adm are not reflected in real requests, probably a bug in the testing module
+	bidder, buildErr := Builder(openrtb_ext.BidderDax, config.Adapter{
+		Endpoint: "https://mock.com?cid=123"})
+
+	if buildErr != nil {
+		t.Fatalf("Builder returned unexpected error %v", buildErr)
+	}
+
+	adapterstest.RunJSONBidderTest(t, "daxtest", bidder)
 }

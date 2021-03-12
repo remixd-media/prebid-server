@@ -53,14 +53,6 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, requestInfo
 			})
 			continue
 		}
-		impExt := openrtb_ext.ExtImpEngageBDR{}
-		err := json.Unmarshal(bidderExt.Bidder, &impExt)
-		if err != nil {
-			errs = append(errs, &errortypes.BadInput{
-				Message: fmt.Sprintf("Ignoring imp id=%s, error while decoding impExt, err: %s.", impression.ID, err),
-			})
-			continue
-		}
 
 		// update headers
 		// set imp id to be able to match it against bid
