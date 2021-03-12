@@ -23,7 +23,7 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, requestInfo
 	adapterRequests := make([]*adapters.RequestData, 0, len(impressions))
 	errs := make([]error, 0, len(impressions))
 
-	if impressions == nil || len(impressions) == 0 {
+	if len(impressions) == 0 {
 		errs = append(errs, &errortypes.BadInput{
 			Message: fmt.Sprintf("Invalid BidRequest. No valid imp."),
 		})
@@ -131,9 +131,18 @@ func (adapter *DaxAdapter) MakeBids(request *openrtb.BidRequest, requestData *ad
 				})
 				continue
 			}
+
+			if vast.Ads[0].InLine.Pricing == "" {
+				vast.Ads[0].InLine.Pricing = "0"
+			}
 			var price float64
 			price, err = strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
-
+			if err != nil {
+				errs = append(errs, &errortypes.BadServerResponse{
+					Message: fmt.Sprintf("Couldn't parse CPM"),
+				})
+				continue
+			}
 			if price == 0 {
 				price = 0.1
 			}
