@@ -641,7 +641,7 @@ func (cfg *Configuration) setDerivedDefaults() {
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderBetween, "https://ads.betweendigital.com/match?bidder_id=pbs&gdpr={{.GDPR}}&gdpr_consent={{.GDPRConsent}}&us_privacy={{.USPrivacy}}&callback_url="+url.QueryEscape(externalURL)+"%2Fsetuid%3Fbidder%3Dbetween%26gdpr%3D0%26gdpr_consent%3D{{.GDPRConsent}}%26uid%3D%24%7BUSER_ID%7D")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderAdsWizz, "https://adswizz-sync.example.com")     // placeholder
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderWideOrbit, "https://wideorbit-sync.example.com") // placeholder
-	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderDax, "https://sync.example.com")                 // placeholder
+	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderDax, "https://geo.ads.audio.thisisdax.com/bulk_sync.js?gdpr={{.GDPR}}&gdpr_consent={{.GDPRConsent}}&redirect="+url.QueryEscape(externalURL)+"%2Fsetuid%3Fbidder%3Ddax%26gdpr%3D%24%7Bgdpr%7D%26gdpr_consent%3D%24%7Bgdpr_consent%7D%26uid%3D%24%7Buid%7D")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderBidSwitch, "https://x.bidswitch.net/sync?ssp=rax20")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderDistrictM, "https://cdn.districtm.io/ids/?sellerid=101977")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderRubicon, "https://secure-assets.rubiconproject.com/utils/xapi/multi-sync.html?p=22106&endpoint=us-east")
