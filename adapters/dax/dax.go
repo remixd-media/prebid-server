@@ -9,6 +9,7 @@ import (
 	"github.com/prebid/prebid-server/config"
 	"github.com/prebid/prebid-server/errortypes"
 	"github.com/prebid/prebid-server/openrtb_ext"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -83,6 +84,7 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, requestInfo
 			Body:    body,
 			Headers: headers,
 		})
+		log.Printf("Dax req Body: %v\n", string(body))
 	}
 
 	request.Imp = impressions
