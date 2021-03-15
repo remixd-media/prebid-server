@@ -44,12 +44,13 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		params := url.Values{}
 		params.Add("version", "1.7.4")
 
-		var adType string
-		/*	if imp.Video.StartDelay != nil && *imp.Video.StartDelay != 0 {
-			adType = "midroll"
-		} else {*/
-		adType = "preroll"
-		//		}
+		adType := "preroll"
+		if imp.Video.StartDelay != nil {
+			delay := *imp.Video.StartDelay
+			if delay == openrtb.StartDelayGenericMidRoll || delay > 0 {
+				adType = "midroll"
+			}
+		}
 		params.Add("type", adType)
 
 		if imp.Video.MinDuration > 0 {
@@ -70,24 +71,36 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			params.Add("iab-categories-to-exclude", strings.Join(request.BCat, ","))
 		}
 
+		var catsV1 []string
+		if request.App != nil {
+			if request.App.Content != nil {
+				catsV1 = request.App.Content.Cat
+			}
+		}
+
 		if request.Site != nil {
 			if request.Site.Page != "" {
 				params.Add("referrer", request.Site.Page)
 				params.Add("site-url", request.Site.Page)
 			}
 
-			catsV1 := request.Site.Cat
-			// convert iab categories to v2 ids
-			catsV2 := ""
-			for _, cat := range catsV1 {
-				if catV2, ok := iabConvMap[cat]; ok {
-					catsV2 += catV2 + ","
-				}
+			if request.Site.Content != nil && len(request.Site.Content.Cat) > 0 {
+				catsV1 = request.Site.Content.Cat
+			} else {
+				catsV1 = request.Site.Cat
 			}
-			catsV2 = strings.TrimSuffix(catsV2, ",")
-			if catsV2 != "" {
-				params.Add("iab-v2-cat", catsV2)
+		}
+
+		// convert iab categories to v2 ids
+		catsV2 := ""
+		for _, cat := range catsV1 {
+			if catV2, ok := iabConvMap[cat]; ok {
+				catsV2 += catV2 + ","
 			}
+		}
+		catsV2 = strings.TrimSuffix(catsV2, ",")
+		if catsV2 != "" {
+			params.Add("iab-v2-cat", catsV2)
 		}
 
 		if request.User != nil {
@@ -141,6 +154,13 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			}
 			if request.Device.IP != "" {
 				params.Add("ip", request.Device.IP)
+			}
+		}
+
+		if imp.Audio != nil {
+			audio := *imp.Audio
+			if audio.Feed == openrtb.FeedTypePodcast {
+				params.Add("feed-type", "podcast")
 			}
 		}
 
@@ -285,11 +305,10 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &TritonDigitalAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
-
 
 // iab conv map v1 => v2
 var iabConvMap = map[string]string{

@@ -137,8 +137,7 @@ func (adapter *BidSwitchAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &BidSwitchAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
-

@@ -150,8 +150,7 @@ func (adapter *DistrictMAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &DistrictMAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
-

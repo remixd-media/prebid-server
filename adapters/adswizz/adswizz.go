@@ -32,7 +32,7 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 	for i := 0; i < numImps; i++ {
 		imp := request.Imp[i]
 
-		if imp.Video == nil {
+		if imp.Audio == nil {
 			continue
 		}
 
@@ -48,8 +48,8 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 		cb := fmt.Sprintf("%x", md5.Sum([]byte(request.ID+"-"+imp.ID)))[:8]
 		params.Add("cb", cb)
 
-		if imp.Video.MaxDuration > 0 {
-			params.Add("duration", fmt.Sprintf("%d", imp.Video.MaxDuration*1000))
+		if imp.Audio.MaxDuration > 0 {
+			params.Add("duration", fmt.Sprintf("%d", imp.Audio.MaxDuration*1000))
 		}
 
 		if len(request.BCat) > 0 {
@@ -112,6 +112,13 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			if request.Site.Page != "" {
 				headers.Set("Referer", request.Site.Page)
 			}
+			if request.Site.Content != nil && len(request.Site.Content.Cat) != 0 {
+				params.Add("cat_include", strings.Join(request.Site.Content.Cat, ","))
+			}
+		}
+
+		if imp.Audio.Feed == openrtb.FeedTypePodcast {
+			params.Add("aw_0_azn.ptype", "Podcast")
 		}
 
 		reqURL := adapter.endpoint + "/" + impExt.Alias + "?" + params.Encode()
@@ -192,13 +199,9 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 	}
 
 	var crID string
-	var duration int
-
 	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
 		creative := vast.Ads[0].InLine.Creatives.Creative[0]
-
 		crID = creative.ID
-		duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
 	}
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
@@ -210,10 +213,7 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 			AdM:   string(response.Body),
 			CrID:  crID,
 		},
-		BidType: openrtb_ext.BidTypeVideo,
-		BidVideo: &openrtb_ext.ExtBidPrebidVideo{
-			Duration: duration,
-		},
+		BidType: openrtb_ext.BidTypeAudio,
 	})
 
 	return bidderResponse, nil
@@ -221,8 +221,7 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
 	bidder := &AdsWizzAdapter{
-		endpoint:    config.Endpoint,
+		endpoint: config.Endpoint,
 	}
 	return bidder, nil
 }
-
