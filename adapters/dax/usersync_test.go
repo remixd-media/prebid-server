@@ -14,7 +14,7 @@ func TestDaxSyncer(t *testing.T) {
 	syncInfo, err := syncer.GetUsersyncInfo(privacy.Policies{})
 	assert.NoError(t, err)
 	assert.Equal(t, "//not_localhost/synclocalhost%2Fsetuid%3Fbidder%3Dadswizz%26uid%3D@UUID@", syncInfo.URL)
-	assert.Equal(t, "redirect", syncInfo.Type)
-	assert.EqualValues(t, 0, syncer.GDPRVendorID())
+	assert.Equal(t, "iframe", syncInfo.Type)
+	assert.EqualValues(t, 886, syncer.GDPRVendorID())
 	assert.Equal(t, false, syncInfo.SupportCORS)
 }
