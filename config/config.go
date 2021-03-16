@@ -898,6 +898,14 @@ func SetupViper(v *viper.Viper, filename string) {
 	v.SetDefault("adapters.yieldone.endpoint", "https://y.one.impact-ad.jp/hbs_imp")
 	v.SetDefault("adapters.zeroclickfraud.endpoint", "http://{{.Host}}/openrtb2?sid={{.SourceId}}")
 
+	// Our adapters, will inject endpoint through environment
+	v.SetDefault("adapters.adswizz.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.dax.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.wideorbit.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.bidswitch.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.districtm.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.tritondigital.endpoint", "https://{{.Host}}")
+
 	v.SetDefault("max_request_size", 1024*256)
 	v.SetDefault("analytics.file.filename", "")
 	v.SetDefault("analytics.pubstack.endpoint", "https://s2s.pbstck.com/v1")

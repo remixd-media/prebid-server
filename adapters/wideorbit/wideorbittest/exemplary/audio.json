@@ -17,7 +17,7 @@
     "imp": [
       {
         "id": "test-imp-id",
-        "video": {
+        "audio": {
           "startdelay": 0,
           "minduration": 5,
           "maxduration": 30,
@@ -61,11 +61,14 @@
       "expectedRequest": {
         "method": "GET",
         "headers": {
+          "Accept-Language" : [
+            "HTTP_ACCEPT_LANGUAGE=en"
+          ],
           "Pbs-Imp-Id": [
             "test-imp-id"
           ]
         },
-        "uri": "https://mock.wideorbit.com?pbId=123&a_age=48&bcat=IAB25%252CIAB7-39%252CIAB8-18&delay=-1&lmt=0&maxbr=1500&maxdur=30&mimes=audio%252Faac%252Caudio%252Fmp4%252Caudio%252Fmpeg&minbr=300&mindur=5&pId=12345&spc=9%252C10&uas=Mozilla%252F5.0%2B%2528Windows%2BNT%2B10.0%253B%2BWin64%253B%2Bx64%2529%2BAppleWebKit%252F537.36%2B%2528KHTML%252C%2Blike%2BGecko%2529%2BChrome%252F87.0.4280.88%2BSafari%252F537.36&uid=user-101&uip=1.2.3.4&url=http%253A%252F%252Fexample.com%252Fpage-1"
+        "uri": "https://mock.wideorbit.com?pbId=123&a_age=48&bcat=IAB25%2CIAB7-39%2CIAB8-18&delay=0&lmt=0&maxbr=1500&maxdur=30&mimes=audio%2Faac%2Caudio%2Fmp4%2Caudio%2Fmpeg&minbr=300&mindur=5&pId=12345&spc=9%2C10&uas=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F87.0.4280.88+Safari%2F537.36&uid=user-101&uip=1.2.3.4&url=http%3A%2F%2Fexample.com%2Fpage-1"
       },
       "mockResponse": {
         "status": 200,
@@ -85,7 +88,7 @@
             "id": "AdswizzAd72745",
             "impid": ""
           },
-          "type": "video"
+          "type": "audio"
         }
       ]
     }
