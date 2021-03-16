@@ -899,12 +899,12 @@ func SetupViper(v *viper.Viper, filename string) {
 	v.SetDefault("adapters.zeroclickfraud.endpoint", "http://{{.Host}}/openrtb2?sid={{.SourceId}}")
 
 	// Our adapters, will inject endpoint through environment
-	v.Set("adapters.adswizz.endpoint", "https://{{.Host}}")
-	v.Set("adapters.dax.endpoint", "https://{{.Host}}")
-	v.Set("adapters.wideorbit.endpoint", "https://{{.Host}}")
-	v.Set("adapters.bidswitch.endpoint", "https://{{.Host}}")
-	v.Set("adapters.districtm.endpoint", "https://{{.Host}}")
-	v.Set("adapters.tritondigital.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.adswizz.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.dax.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.wideorbit.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.bidswitch.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.districtm.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.tritondigital.endpoint", "https://{{.Host}}")
 
 	v.SetDefault("max_request_size", 1024*256)
 	v.SetDefault("analytics.file.filename", "")
