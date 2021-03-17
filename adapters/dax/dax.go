@@ -108,7 +108,7 @@ func (adapter *DaxAdapter) MakeBids(request *openrtb.BidRequest, requestData *ad
 		}}
 	}
 
-	fmt.Printf("dax makeBids response body (id: %v): %q\n", request.ID, string(responseData.Body))
+	fmt.Printf("dax makeBids response body (id: %v): %s\n", request.ID, string(responseData.Body))
 
 	var bidResponse openrtb.BidResponse
 	err := json.Unmarshal(responseData.Body, &bidResponse)
