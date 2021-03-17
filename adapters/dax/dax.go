@@ -9,7 +9,6 @@ import (
 	"github.com/prebid/prebid-server/config"
 	"github.com/prebid/prebid-server/errortypes"
 	"github.com/prebid/prebid-server/openrtb_ext"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -84,7 +83,7 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, requestInfo
 			Body:    body,
 			Headers: headers,
 		})
-		log.Printf("Dax req Body: %v\n", string(body))
+		fmt.Printf("dax req body: %v\n", string(body))
 	}
 
 	request.Imp = impressions
@@ -108,6 +107,8 @@ func (adapter *DaxAdapter) MakeBids(request *openrtb.BidRequest, requestData *ad
 			Message: "unexpected status code: " + strconv.Itoa(responseData.StatusCode),
 		}}
 	}
+
+	fmt.Printf("dax makeBids response body (id: %v): %q\n", request.ID, string(responseData.Body))
 
 	var bidResponse openrtb.BidResponse
 	err := json.Unmarshal(responseData.Body, &bidResponse)
