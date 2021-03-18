@@ -31,7 +31,7 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 	for i := 0; i < numImps; i++ {
 		imp := request.Imp[i]
 
-		if imp.Video == nil {
+		if imp.Audio == nil {
 			continue
 		}
 
@@ -45,26 +45,26 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 		params.Add("version", "1.7.4")
 
 		adType := "preroll"
-		if imp.Video.StartDelay != nil {
-			delay := *imp.Video.StartDelay
+		if imp.Audio.StartDelay != nil {
+			delay := *imp.Audio.StartDelay
 			if delay == openrtb.StartDelayGenericMidRoll || delay > 0 {
 				adType = "midroll"
 			}
 		}
 		params.Add("type", adType)
 
-		if imp.Video.MinDuration > 0 {
-			params.Add("mindur", fmt.Sprintf("%d", imp.Video.MinDuration))
+		if imp.Audio.MinDuration > 0 {
+			params.Add("mindur", fmt.Sprintf("%d", imp.Audio.MinDuration))
 		}
-		if imp.Video.MaxDuration > 0 {
-			params.Add("maxdur", fmt.Sprintf("%d", imp.Video.MaxDuration))
+		if imp.Audio.MaxDuration > 0 {
+			params.Add("maxdur", fmt.Sprintf("%d", imp.Audio.MaxDuration))
 		}
 
-		if imp.Video.MinBitRate > 0 {
-			params.Add("minbr", fmt.Sprintf("%d", imp.Video.MinBitRate))
+		if imp.Audio.MinBitrate > 0 {
+			params.Add("minbr", fmt.Sprintf("%d", imp.Audio.MinBitrate))
 		}
-		if imp.Video.MaxBitRate > 0 {
-			params.Add("maxbr", fmt.Sprintf("%d", imp.Video.MaxBitRate))
+		if imp.Audio.MaxBitrate > 0 {
+			params.Add("maxbr", fmt.Sprintf("%d", imp.Audio.MaxBitrate))
 		}
 
 		if len(request.BCat) > 0 {
@@ -157,11 +157,8 @@ func (adapter *TritonDigitalAdapter) MakeRequests(request *openrtb.BidRequest, r
 			}
 		}
 
-		if imp.Audio != nil {
-			audio := *imp.Audio
-			if audio.Feed == openrtb.FeedTypePodcast {
-				params.Add("feed-type", "podcast")
-			}
+		if imp.Audio.Feed == openrtb.FeedTypePodcast {
+			params.Add("feed-type", "podcast")
 		}
 
 		params.Add("at", "audio")
@@ -267,13 +264,10 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	price = math.Floor(price*10000) / 10000
 
 	var crID string
-	var duration int
 
 	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
 		creative := vast.Ads[0].InLine.Creatives.Creative[0]
-
 		crID = creative.ID
-		duration = adapters.ParseDuration(creative.Linear.Duration)
 	}
 
 	adID := vast.Ads[0].ID
@@ -294,10 +288,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 			AdM:   adm,
 			CrID:  crID,
 		},
-		BidType: openrtb_ext.BidTypeVideo,
-		BidVideo: &openrtb_ext.ExtBidPrebidVideo{
-			Duration: duration,
-		},
+		BidType: openrtb_ext.BidTypeAudio,
 	})
 
 	return bidderResponse, nil
