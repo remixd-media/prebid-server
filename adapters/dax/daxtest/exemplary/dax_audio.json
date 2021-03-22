@@ -46,17 +46,9 @@
           "stitched": 1
         },
         "ext": {
-          "dax": {}
-        },
-        "pmp": {
-          "private_auction": 1,
-          "deals": [
-            {
-              "id": "28563614-8225-4d24-8816-bb1d3ef0f4fe",
-              "bidfloorcur": "USD",
-              "at": 1
-            }
-          ]
+          "bidder": {
+            "dealId": "f70a8022-c725-4aae-9a0d-daf09b51c048"
+          }
         }
       }
     ]
@@ -112,13 +104,15 @@
                 "stitched": 1
               },
               "ext": {
-                "dax": {}
+                "bidder": {
+                  "dealId": "f70a8022-c725-4aae-9a0d-daf09b51c048"
+                }
               },
               "pmp": {
                 "private_auction": 1,
                 "deals": [
                   {
-                    "id": "28563614-8225-4d24-8816-bb1d3ef0f4fe",
+                    "id": "f70a8022-c725-4aae-9a0d-daf09b51c048",
                     "bidfloorcur": "USD",
                     "at": 1
                   }
@@ -136,7 +130,7 @@
             {
               "bid": [
                 {
-                  "dealid": "28563614-8225-4d24-8816-bb1d3ef0f4fe",
+                  "dealid": "f70a8022-c725-4aae-9a0d-daf09b51c048",
                   "id": "fe69dd6d-e85c-4186-80a7-605b530bc23b",
                   "adomain": [
                     "trainingtest.com"
@@ -171,7 +165,7 @@
               "trainingtest.com"
             ],
             "crid": "564",
-            "dealid": "28563614-8225-4d24-8816-bb1d3ef0f4fe"
+            "dealid": "f70a8022-c725-4aae-9a0d-daf09b51c048"
           },
           "type": "audio"
         }
