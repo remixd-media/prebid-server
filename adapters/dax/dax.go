@@ -46,14 +46,6 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, requestInfo
 			continue
 		}
 
-		var bidderExt adapters.ExtImpBidder
-		if err := json.Unmarshal(impression.Ext, &bidderExt); err != nil {
-			errs = append(errs, &errortypes.BadInput{
-				Message: fmt.Sprintf("Ignoring imp id=%s, error while decoding extImpBidder, err: %s.", impression.ID, err),
-			})
-			continue
-		}
-
 		// update headers
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", impression.ID)
@@ -69,6 +61,24 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, requestInfo
 			if request.Site.Page != "" {
 				headers.Set("Referer", request.Site.Page)
 			}
+		}
+
+		impExt, err := adapter.parseExt(&impression)
+		if err != nil {
+			errs = append(errs, err)
+			continue
+		}
+
+		impression.PMP = &openrtb.PMP{
+			PrivateAuction: 1,
+			Deals: []openrtb.Deal{
+				{
+					ID:          impExt.DealId,
+					BidFloor:    0,
+					BidFloorCur: "USD",
+					AT:          1,
+				},
+			},
 		}
 
 		request.Imp = []openrtb.Imp{impression}
@@ -90,6 +100,25 @@ func (adapter *DaxAdapter) MakeRequests(request *openrtb.BidRequest, requestInfo
 	return adapterRequests, errs
 }
 
+func (adapter *DaxAdapter) parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpDax, error) {
+	var bidderExt adapters.ExtImpBidder
+
+	if err := json.Unmarshal(imp.Ext, &bidderExt); err != nil {
+		return nil, &errortypes.BadInput{
+			Message: fmt.Sprintf("Ignoring imp id=%s, error while decoding extImpBidder, err: %s", imp.ID, err),
+		}
+	}
+
+	impExt := openrtb_ext.ExtImpDax{}
+	err := json.Unmarshal(bidderExt.Bidder, &impExt)
+	if err != nil {
+		return nil, &errortypes.BadInput{
+			Message: fmt.Sprintf("Ignoring imp id=%s, error while decoding impExt, err: %s", imp.ID, err),
+		}
+	}
+
+	return &impExt, nil
+}
 func (adapter *DaxAdapter) MakeBids(request *openrtb.BidRequest, requestData *adapters.RequestData, responseData *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	var errs []error
 
