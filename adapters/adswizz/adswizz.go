@@ -113,7 +113,7 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 				headers.Set("Referer", request.Site.Page)
 			}
 			if request.Site.Content != nil && len(request.Site.Content.Cat) != 0 {
-				params.Add("cat_include", strings.Join(request.Site.Content.Cat, ","))
+				//params.Add("cat_include", strings.Join(request.Site.Content.Cat, ","))
 			}
 		}
 
