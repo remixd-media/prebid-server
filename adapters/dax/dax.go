@@ -164,26 +164,10 @@ func (adapter *DaxAdapter) MakeBids(request *openrtb.BidRequest, requestData *ad
 				continue
 			}
 
-			if vast.Ads[0].InLine.Pricing == "" {
-				vast.Ads[0].InLine.Pricing = "0"
-			}
-			var price float64
-			price, err = strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
-			if err != nil {
-				errs = append(errs, &errortypes.BadServerResponse{
-					Message: fmt.Sprintf("Couldn't parse CPM"),
-				})
-				continue
-			}
-			if price == 0 {
-				price = 0.1
-			}
-
 			var crID string
 
 			if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
 				creative := vast.Ads[0].InLine.Creatives.Creative[0]
-
 				crID = creative.ID
 			}
 			newBid := &adapters.TypedBid{
@@ -192,7 +176,6 @@ func (adapter *DaxAdapter) MakeBids(request *openrtb.BidRequest, requestData *ad
 			}
 			newBid.Bid.ID = vast.Ads[0].ID
 			newBid.Bid.ImpID = impID
-			newBid.Bid.Price = price
 			newBid.Bid.CrID = crID
 			response.Bids = append(response.Bids, newBid)
 		}
