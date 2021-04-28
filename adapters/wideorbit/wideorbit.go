@@ -71,7 +71,12 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		params.Add("minbr", fmt.Sprintf("%d", imp.Audio.MinBitrate))
 		params.Add("maxbr", fmt.Sprintf("%d", imp.Audio.MaxBitrate))
 		params.Add("mimes", strings.Join(imp.Audio.MIMEs, ","))
-		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(imp.Audio.Protocols)), ","), "[]"))
+
+		protocols := []openrtb.Protocol{
+			openrtb.ProtocolVAST20, openrtb.ProtocolVAST30,
+			openrtb.ProtocolVAST20Wrapper, openrtb.ProtocolVAST30Wrapper,
+		}
+		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(protocols)), ","), "[]"))
 
 		//URL of the webpage/station the ad is played on. For in app requests, this should be aliased to the top level domain of the station’s website.
 		params.Add("url", request.Site.Page)
@@ -79,7 +84,9 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		//preroll
 		delay := "0"
 		if imp.Audio.StartDelay != nil {
-			delay = fmt.Sprint(*imp.Audio.StartDelay)
+			if *imp.Audio.StartDelay != openrtb.StartDelayGenericPostRoll {
+				delay = fmt.Sprint(*imp.Audio.StartDelay)
+			}
 		}
 		params.Add("delay", delay)
 		if imp.Audio.Feed == openrtb.FeedTypePodcast {
