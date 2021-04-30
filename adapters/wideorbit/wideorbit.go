@@ -243,6 +243,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	if price == 0 {
 		price = 0.1
 	}
+	price = math.Round(price*100) / 100
 
 	var crID string
 
@@ -252,9 +253,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 		crID = creative.ID
 		//duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
 	}
-
-	price = math.Round(price*100) / 100
-
+	
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
 		Bid: &openrtb.Bid{
