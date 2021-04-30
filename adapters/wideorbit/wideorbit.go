@@ -253,7 +253,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 		crID = creative.ID
 		//duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
 	}
-	
+
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
 		Bid: &openrtb.Bid{
