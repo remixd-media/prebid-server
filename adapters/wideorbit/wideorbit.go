@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/prebid/prebid-server/config"
+	"math"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -242,6 +243,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	if price == 0 {
 		price = 0.1
 	}
+	price = math.Round(price*100) / 100
 
 	var crID string
 
