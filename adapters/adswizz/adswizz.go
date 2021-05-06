@@ -161,20 +161,25 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpAdsWizz, error) {
 
 func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
+		fmt.Printf("adswizz makeBids no content (id: %v):\n", internalRequest.ID)
 		return nil, nil
 	}
 
 	if response.StatusCode == http.StatusBadRequest {
+		fmt.Printf("adswizz makeBids err bad input (id: %v): http status %v\n", internalRequest.ID, response.StatusCode)
 		return nil, []error{&errortypes.BadInput{
 			Message: fmt.Sprintf("Bad user input: HTTP status %d", response.StatusCode),
 		}}
 	}
 
 	if response.StatusCode != http.StatusOK {
+		fmt.Printf("adswizz makeBids err bad server response (id: %v): http status %v\n", internalRequest.ID, response.StatusCode)
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("Bad server response: HTTP status %d", response.StatusCode),
 		}}
 	}
+
+	fmt.Printf("adswizz makeBids response body (id: %v): %q\n", internalRequest.ID, string(response.Body))
 
 	var vast adapters.VAST
 	err := xml.Unmarshal(response.Body, &vast)
