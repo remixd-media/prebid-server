@@ -74,7 +74,8 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		params.Add("mimes", strings.Join(imp.Audio.MIMEs, ","))
 
 		protocols := []openrtb.Protocol{
-			openrtb.ProtocolVAST20, openrtb.ProtocolVAST30,
+			//openrtb.ProtocolVAST20,
+			openrtb.ProtocolVAST30,
 			//	openrtb.ProtocolVAST20Wrapper, openrtb.ProtocolVAST30Wrapper,
 		}
 		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(protocols)), ","), "[]"))
