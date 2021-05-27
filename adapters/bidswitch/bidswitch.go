@@ -24,15 +24,25 @@ type BidSwitchAdapter struct {
 func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
 	requests := []*adapters.RequestData{}
 
-	for i := range request.Imp {
-		request.Imp[i].Audio = nil // remove unused audio section
-		request.Imp[i].Ext = nil   // remove unused imp ext
-		if request.Site != nil {
-			request.Site.Ext = nil // remove unused site ext
-		}
+	requestCopy := *request
+
+	// copy impressions
+	requestCopy.Imp = append([]openrtb.Imp{}, request.Imp...)
+	//copy site
+	if request.Site != nil {
+		siteCopy := *request.Site
+		requestCopy.Site = &siteCopy
 	}
 
-	jsonBody, err := json.Marshal(request)
+	for i := range requestCopy.Imp {
+		requestCopy.Imp[i].Audio = nil // remove unused audio section
+		requestCopy.Imp[i].Ext = nil   // remove unused imp ext
+	}
+	if requestCopy.Site != nil {
+		requestCopy.Site.Ext = nil // remove unused site ext
+	}
+
+	jsonBody, err := json.Marshal(requestCopy)
 	if err != nil {
 		return nil, []error{err}
 	}

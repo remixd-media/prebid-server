@@ -9,11 +9,11 @@ import (
 )
 
 func TestDaxSyncer(t *testing.T) {
-	temp := template.Must(template.New("sync-template").Parse("//not_localhost/synclocalhost%2Fsetuid%3Fbidder%3Dadswizz%26uid%3D@UUID@"))
+	temp := template.Must(template.New("sync-template").Parse("//not_localhost/synclocalhost%2Fsetuid%3Fbidder%3Ddax%26uid%3D@UUID@"))
 	syncer := NewDaxSyncer(temp)
 	syncInfo, err := syncer.GetUsersyncInfo(privacy.Policies{})
 	assert.NoError(t, err)
-	assert.Equal(t, "//not_localhost/synclocalhost%2Fsetuid%3Fbidder%3Dadswizz%26uid%3D@UUID@", syncInfo.URL)
+	assert.Equal(t, "//not_localhost/synclocalhost%2Fsetuid%3Fbidder%3Ddax%26uid%3D@UUID@", syncInfo.URL)
 	assert.Equal(t, "iframe", syncInfo.Type)
 	assert.EqualValues(t, 0, syncer.GDPRVendorID())
 	assert.Equal(t, false, syncInfo.SupportCORS)
