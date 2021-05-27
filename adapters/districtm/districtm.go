@@ -21,32 +21,47 @@ func (adapter *DistrictMAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 
 	errors := []error{}
 
-	for i := range request.Imp {
-		impExt, err := parseExt(&request.Imp[i])
+	requestCopy := *request
+
+	//copy impressions
+	requestCopy.Imp = append([]openrtb.Imp{}, request.Imp...)
+	//copy site and publisher
+	if request.Site != nil {
+		siteCopy := *request.Site
+		requestCopy.Site = &siteCopy
+
+		if request.Site.Publisher != nil {
+			publisherCopy := *request.Site.Publisher
+			requestCopy.Site.Publisher = &publisherCopy
+		}
+	}
+
+	for i := range requestCopy.Imp {
+		impExt, err := parseExt(&requestCopy.Imp[i])
 		if err != nil {
 			errors = append(errors, err)
 			continue
 		}
 
-		request.Imp[i].Video = nil // remove unused video section
-		request.Imp[i].Ext = nil   // remove unused imp ext
-		if request.Site != nil {
-			request.Site.Ext = nil // remove unused site ext
+		requestCopy.Imp[i].Video = nil // remove unused video section
+		requestCopy.Imp[i].Ext = nil   // remove unused imp ext
+		if requestCopy.Site != nil {
+			requestCopy.Site.Ext = nil // remove unused site ext
 
-			if request.Site.Publisher == nil {
-				request.Site.Publisher = &openrtb.Publisher{}
+			if requestCopy.Site.Publisher == nil {
+				requestCopy.Site.Publisher = &openrtb.Publisher{}
 			}
-			request.Site.Publisher.ID = impExt.PublisherID
+			requestCopy.Site.Publisher.ID = impExt.PublisherID
 		}
 
-		request.Imp[i].TagID = "DMX-Remixd"
+		requestCopy.Imp[i].TagID = "DMX-Remixd"
 
 		/*		if request.User == nil || request.User.BuyerUID == "" {
 				return nil, []error{fmt.Errorf("districtm no user buyer id")}
 			}*/
 	}
 
-	jsonBody, err := json.Marshal(request)
+	jsonBody, err := json.Marshal(requestCopy)
 	if err != nil {
 		return nil, []error{err}
 	}
