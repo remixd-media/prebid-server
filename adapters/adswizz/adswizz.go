@@ -108,16 +108,24 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			}
 		}
 
+		isPodcast := imp.Audio.Feed == openrtb.FeedTypePodcast
 		if request.Site != nil {
 			if request.Site.Page != "" {
 				headers.Set("Referer", request.Site.Page)
 			}
-			if request.Site.Content != nil && len(request.Site.Content.Cat) != 0 {
-				//params.Add("cat_include", strings.Join(request.Site.Content.Cat, ","))
+
+			if request.Site.Content != nil {
+				content := request.Site.Content
+				if len(content.Cat) != 0 && !isPodcast {
+					params.Add("cat_include", content.Cat[0])
+				}
+				if content.Genre != "" {
+					params.Add("aw_0_azn.pgenre", content.Genre)
+				}
 			}
 		}
 
-		if imp.Audio.Feed == openrtb.FeedTypePodcast {
+		if isPodcast {
 			params.Add("aw_0_azn.ptype", "Podcast")
 		}
 
