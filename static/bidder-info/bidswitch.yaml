@@ -3,5 +3,4 @@ maintainer:
 capabilities:
   site:
     mediaTypes:
-      - video
       - audio
