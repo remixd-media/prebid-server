@@ -35,8 +35,18 @@ func (adapter *BidSwitchAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 	}
 
 	for i := range requestCopy.Imp {
-		requestCopy.Imp[i].Audio = nil // remove unused audio section
-		requestCopy.Imp[i].Ext = nil   // remove unused imp ext
+		requestCopy.Imp[i].Ext = nil // remove unused imp ext
+		requestCopy.Imp[i].PMP = &openrtb.PMP{
+			PrivateAuction: 1,
+			Deals: []openrtb.Deal{
+				{
+					ID:          "Remixd-Premium-Audio-Blis",
+					BidFloor:    0,
+					BidFloorCur: "USD",
+					AT:          1,
+				},
+			},
+		}
 	}
 	if requestCopy.Site != nil {
 		requestCopy.Site.Ext = nil // remove unused site ext

@@ -17,7 +17,7 @@
     "imp": [
       {
         "id": "test-imp-id",
-        "video": {
+        "audio": {
           "startdelay": 0,
           "minduration": 5,
           "maxduration": 30,
@@ -80,7 +80,7 @@
           "imp": [
             {
               "id": "test-imp-id",
-              "video": {
+              "audio": {
                 "startdelay": 0,
                 "minduration": 5,
                 "maxduration": 30,
@@ -93,6 +93,16 @@
                   9,
                   10
                 ],
+                "pmp": {
+                  "private_auction": 1,
+                  "deals": [
+                    {
+                      "id": "Remixd-Premium-Audio-Blis",
+                      "bidfloorcur": "USD",
+                      "at": 1
+                    }
+                  ]
+                },
                 "mimes": [
                   "audio/aac",
                   "audio/mp4",
