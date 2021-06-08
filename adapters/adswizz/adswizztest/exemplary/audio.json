@@ -80,7 +80,7 @@
             "1.2.3.4"
           ]
         },
-        "uri": "https://mock.deliveryengine.adswizz.com/vast/4.0/request/alias/?aw_0_1st.age=48&aw_0_azn.pgenre=Rock&aw_0_azn.pname=123&cat_exclude=IAB25%2CIAB7-39%2CIAB8-18&cat_include=IAB1&cb=dd418744&duration=30000&listenerId=user-101"
+        "uri": "https://mock.deliveryengine.adswizz.com/vast/4.0/request/alias/?aw_0_1st.age=48&aw_0_azn.pgenre=Rock&aw_0_azn.pname=123&cat_exclude=IAB25%2CIAB7-39%2CIAB8-18&cb=dd418744&duration=30000&listenerId=user-101"
       },
       "mockResponse": {
         "status": 200,
