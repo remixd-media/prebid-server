@@ -116,9 +116,11 @@ func (adapter *AdsWizzAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 
 			if request.Site.Content != nil {
 				content := request.Site.Content
-				if len(content.Cat) != 0 && !isPodcast {
-					params.Add("cat_include", content.Cat[0])
-				}
+				/*
+					if len(content.Cat) != 0 && !isPodcast {
+						params.Add("cat_include", content.Cat[0])
+					}
+				*/
 				if content.Genre != "" {
 					params.Add("aw_0_azn.pgenre", content.Genre)
 				}
