@@ -73,7 +73,15 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		params.Add("maxbr", fmt.Sprintf("%d", imp.Audio.MaxBitrate))
 		params.Add("mimes", strings.Join(imp.Audio.MIMEs, ","))
 
-		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(imp.Audio.Protocols)), ","), "[]"))
+		//remove unsupported protocols
+		var filteredProtocols []openrtb.Protocol
+		for _, protocol := range imp.Audio.Protocols {
+			if protocol != openrtb.ProtocolVAST40 && protocol != openrtb.ProtocolVAST40Wrapper {
+				filteredProtocols = append(filteredProtocols, protocol)
+			}
+		}
+
+		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(filteredProtocols)), ","), "[]"))
 
 		//URL of the webpage/station the ad is played on. For in app requests, this should be aliased to the top level domain of the station’s website.
 		params.Add("url", request.Site.Page)
