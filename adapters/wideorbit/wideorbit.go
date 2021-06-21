@@ -73,12 +73,17 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		params.Add("maxbr", fmt.Sprintf("%d", imp.Audio.MaxBitrate))
 		params.Add("mimes", strings.Join(imp.Audio.MIMEs, ","))
 
+		foundProtocols := map[openrtb.Protocol]bool{}
 		//remove unsupported protocols
 		var filteredProtocols []openrtb.Protocol
 		for _, protocol := range imp.Audio.Protocols {
+			foundProtocols[protocol] = true
 			if protocol != openrtb.ProtocolVAST40 && protocol != openrtb.ProtocolVAST40Wrapper {
 				filteredProtocols = append(filteredProtocols, protocol)
 			}
+		}
+		if imp.Audio.Feed == openrtb.FeedTypePodcast && !foundProtocols[openrtb.ProtocolVAST20] {
+			filteredProtocols = append(filteredProtocols, openrtb.ProtocolVAST20)
 		}
 
 		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(filteredProtocols)), ","), "[]"))
@@ -225,6 +230,8 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 			Message: fmt.Sprintf("Bad server response: HTTP status %d", response.StatusCode),
 		}}
 	}
+
+	fmt.Printf("wideorbit makeBids response body (id: %v): %q\n", internalRequest.ID, string(response.Body))
 
 	var vast adapters.VAST
 	err := xml.Unmarshal(response.Body, &vast)
