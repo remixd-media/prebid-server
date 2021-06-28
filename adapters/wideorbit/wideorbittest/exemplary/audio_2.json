@@ -74,7 +74,7 @@
             "test-imp-id"
           ]
         },
-        "uri": "https://mock.wideorbit.com?pbId=123&a_age=48&bcat=IAB25%2CIAB7-39%2CIAB8-18&delay=0&lmt=0&maxbr=1500&maxdur=30&mimes=audio%2Faac%2Caudio%2Fmp4%2Caudio%2Fmpeg&minbr=300&mindur=5&pId=12345&spc=3&uas=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F87.0.4280.88+Safari%2F537.36&uid=user-101&uip=1.2.3.4&url=http%3A%2F%2Fexample.com%2Fpage-1"
+        "uri": "https://mock.wideorbit.com?pbId=123&a_age=48&bcat=IAB25%2CIAB7-39%2CIAB8-18&delay=0&lmt=0&maxbr=1500&maxdur=30&mimes=audio%2Faac%2Caudio%2Fmp4%2Caudio%2Fmpeg&minbr=300&mindur=5&pId=12345&spc=3%2C4%2C5%2C6%2C9%2C10&uas=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F87.0.4280.88+Safari%2F537.36&uid=user-101&uip=1.2.3.4&url=http%3A%2F%2Fexample.com%2Fpage-1"
       },
       "mockResponse": {
         "status": 200,

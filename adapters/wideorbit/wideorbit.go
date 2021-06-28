@@ -73,20 +73,18 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		params.Add("maxbr", fmt.Sprintf("%d", imp.Audio.MaxBitrate))
 		params.Add("mimes", strings.Join(imp.Audio.MIMEs, ","))
 
-		//foundProtocols := map[openrtb.Protocol]bool{}
+		foundProtocols := map[openrtb.Protocol]bool{}
 		//remove unsupported protocols
 		var filteredProtocols []openrtb.Protocol
-		filteredProtocols = append(filteredProtocols, openrtb.ProtocolVAST30)
-		/*
-			for _, protocol := range imp.Audio.Protocols {
-				foundProtocols[protocol] = true
-				if protocol != openrtb.ProtocolVAST40 && protocol != openrtb.ProtocolVAST40Wrapper {
-					filteredProtocols = append(filteredProtocols, protocol)
-				}
+		for _, protocol := range imp.Audio.Protocols {
+			foundProtocols[protocol] = true
+			if protocol != openrtb.ProtocolVAST40 && protocol != openrtb.ProtocolVAST40Wrapper {
+				filteredProtocols = append(filteredProtocols, protocol)
 			}
-			if imp.Audio.Feed == openrtb.FeedTypePodcast && !foundProtocols[openrtb.ProtocolVAST20] {
-				filteredProtocols = append(filteredProtocols, openrtb.ProtocolVAST20)
-			}*/
+		}
+		if imp.Audio.Feed == openrtb.FeedTypePodcast && !foundProtocols[openrtb.ProtocolVAST20] {
+			filteredProtocols = append(filteredProtocols, openrtb.ProtocolVAST20)
+		}
 
 		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(filteredProtocols)), ","), "[]"))
 
