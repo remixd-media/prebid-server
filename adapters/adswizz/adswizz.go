@@ -8,7 +8,6 @@ import (
 	"github.com/prebid/prebid-server/config"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 
@@ -203,7 +202,7 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 		}}
 	}
 
-	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
+	price, err := vast.Ads[0].GetPricing()
 	if err != nil {
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("Couldn't parse CPM"),
@@ -213,11 +212,7 @@ func (adapter *AdsWizzAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 		price = 0.1
 	}
 
-	var crID string
-	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
-		creative := vast.Ads[0].InLine.Creatives.Creative[0]
-		crID = creative.ID
-	}
+	crID := vast.Ads[0].GetCreativeId()
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{

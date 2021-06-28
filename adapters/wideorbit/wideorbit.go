@@ -9,7 +9,6 @@ import (
 	"math"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 
@@ -73,20 +72,18 @@ func (adapter *WideOrbitAdapter) MakeRequests(request *openrtb.BidRequest, reqIn
 		params.Add("maxbr", fmt.Sprintf("%d", imp.Audio.MaxBitrate))
 		params.Add("mimes", strings.Join(imp.Audio.MIMEs, ","))
 
-		//foundProtocols := map[openrtb.Protocol]bool{}
+		foundProtocols := map[openrtb.Protocol]bool{}
 		//remove unsupported protocols
 		var filteredProtocols []openrtb.Protocol
-		filteredProtocols = append(filteredProtocols, openrtb.ProtocolVAST30)
-		/*
-			for _, protocol := range imp.Audio.Protocols {
-				foundProtocols[protocol] = true
-				if protocol != openrtb.ProtocolVAST40 && protocol != openrtb.ProtocolVAST40Wrapper {
-					filteredProtocols = append(filteredProtocols, protocol)
-				}
+		for _, protocol := range imp.Audio.Protocols {
+			foundProtocols[protocol] = true
+			if protocol != openrtb.ProtocolVAST40 && protocol != openrtb.ProtocolVAST40Wrapper {
+				filteredProtocols = append(filteredProtocols, protocol)
 			}
-			if imp.Audio.Feed == openrtb.FeedTypePodcast && !foundProtocols[openrtb.ProtocolVAST20] {
-				filteredProtocols = append(filteredProtocols, openrtb.ProtocolVAST20)
-			}*/
+		}
+		if imp.Audio.Feed == openrtb.FeedTypePodcast && !foundProtocols[openrtb.ProtocolVAST20] {
+			filteredProtocols = append(filteredProtocols, openrtb.ProtocolVAST20)
+		}
 
 		params.Add("spc", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(filteredProtocols)), ","), "[]"))
 
@@ -247,7 +244,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 		}}
 	}
 
-	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
+	price, err := vast.Ads[0].GetPricing()
 	if err != nil {
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("Couldn't parse CPM"),
@@ -258,14 +255,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	}
 	price = math.Round(price*100) / 100
 
-	var crID string
-
-	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
-		creative := vast.Ads[0].InLine.Creatives.Creative[0]
-
-		crID = creative.ID
-		//duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
-	}
+	crID := vast.Ads[0].GetCreativeId()
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{

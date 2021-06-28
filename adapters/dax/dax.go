@@ -164,12 +164,7 @@ func (adapter *DaxAdapter) MakeBids(request *openrtb.BidRequest, requestData *ad
 				continue
 			}
 
-			var crID string
-
-			if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
-				creative := vast.Ads[0].InLine.Creatives.Creative[0]
-				crID = creative.ID
-			}
+			crID := vast.Ads[0].GetCreativeId()
 			newBid := &adapters.TypedBid{
 				Bid:     &seatBid.Bid[i],
 				BidType: openrtb_ext.BidTypeAudio,

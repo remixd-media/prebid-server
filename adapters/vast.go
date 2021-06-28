@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,11 +12,38 @@ type VAST struct {
 }
 
 type Ad struct {
-	ID     string `xml:"id,attr"`
-	InLine InLine `xml:"InLine"`
+	ID      string   `xml:"id,attr"`
+	InLine  *InLine  `xml:"InLine"`
+	Wrapper *Wrapper `xml:"Wrapper"`
+}
+
+func (a Ad) GetPricing() (float64, error) {
+	if a.InLine != nil {
+		return strconv.ParseFloat(a.InLine.Pricing, 64)
+	}
+	if a.Wrapper != nil {
+		return strconv.ParseFloat(a.Wrapper.Pricing, 64)
+	}
+
+	return 0, fmt.Errorf("no inline or wrapper")
+}
+
+func (a Ad) GetCreativeId() string {
+	if a.InLine != nil && len(a.InLine.Creatives.Creative) > 0 {
+		return a.InLine.Creatives.Creative[0].ID
+	}
+	if a.Wrapper != nil && len(a.Wrapper.Creatives.Creative) > 0 {
+		return a.Wrapper.Creatives.Creative[0].ID
+	}
+	return ""
 }
 
 type InLine struct {
+	Pricing   string    `xml:"Pricing"`
+	Creatives Creatives `xml:"Creatives"`
+}
+
+type Wrapper struct {
 	Pricing   string    `xml:"Pricing"`
 	Creatives Creatives `xml:"Creatives"`
 }
