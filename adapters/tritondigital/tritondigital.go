@@ -8,7 +8,6 @@ import (
 	"math"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/mxmCherry/openrtb"
@@ -250,7 +249,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 		}}
 	}
 
-	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
+	price, err := vast.Ads[0].GetPricing()
 	if err != nil {
 		fmt.Printf("tritondigital makeBids couldn't parse CPM (id: %v)\n", internalRequest.ID)
 		return nil, []error{&errortypes.BadServerResponse{
@@ -263,13 +262,7 @@ func (adapter *TritonDigitalAdapter) MakeBids(internalRequest *openrtb.BidReques
 	// round to 4 decimals
 	price = math.Floor(price*10000) / 10000
 
-	var crID string
-
-	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
-		creative := vast.Ads[0].InLine.Creatives.Creative[0]
-		crID = creative.ID
-	}
-
+	crID := vast.Ads[0].GetCreativeId()
 	adID := vast.Ads[0].ID
 
 	if crID == "" {

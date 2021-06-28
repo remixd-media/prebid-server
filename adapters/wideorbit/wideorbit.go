@@ -9,7 +9,6 @@ import (
 	"math"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 
@@ -245,7 +244,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 		}}
 	}
 
-	price, err := strconv.ParseFloat(vast.Ads[0].InLine.Pricing, 64)
+	price, err := vast.Ads[0].GetPricing()
 	if err != nil {
 		return nil, []error{&errortypes.BadServerResponse{
 			Message: fmt.Sprintf("Couldn't parse CPM"),
@@ -256,14 +255,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	}
 	price = math.Round(price*100) / 100
 
-	var crID string
-
-	if len(vast.Ads[0].InLine.Creatives.Creative) > 0 {
-		creative := vast.Ads[0].InLine.Creatives.Creative[0]
-
-		crID = creative.ID
-		//duration = adapters.ParseDuration(vast.Ads[0].InLine.Creatives.Creative[0].Linear.Duration)
-	}
+	crID := vast.Ads[0].GetCreativeId()
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
