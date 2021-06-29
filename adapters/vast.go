@@ -39,13 +39,15 @@ func (a Ad) GetCreativeId() string {
 }
 
 type InLine struct {
-	Pricing   string    `xml:"Pricing"`
-	Creatives Creatives `xml:"Creatives"`
+	Pricing    string      `xml:"Pricing"`
+	Creatives  Creatives   `xml:"Creatives"`
+	Extensions []Extension `xml:"Extensions>Extension,omitempty"`
 }
 
 type Wrapper struct {
-	Pricing   string    `xml:"Pricing"`
-	Creatives Creatives `xml:"Creatives"`
+	Pricing    string      `xml:"Pricing"`
+	Creatives  Creatives   `xml:"Creatives"`
+	Extensions []Extension `xml:"Extensions>Extension,omitempty"`
 }
 
 type Creatives struct {
@@ -55,6 +57,12 @@ type Creatives struct {
 type Creative struct {
 	ID     string `xml:"id,attr"`
 	Linear Linear `xml:"Linear"`
+}
+
+type Extension struct {
+	Type string `xml:"type,attr,omitempty"`
+	Name string `xml:"name,attr,omitempty"`
+	Data []byte `xml:",innerxml"`
 }
 
 type Linear struct {
