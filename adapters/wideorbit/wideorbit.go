@@ -213,6 +213,10 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpWideOrbit, error) {
 	return &impExt, nil
 }
 
+type RubiconExtension struct {
+	CreativeId string `xml:"CreativeId"`
+}
+
 func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
@@ -255,7 +259,7 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	}
 	price = math.Round(price*100) / 100
 
-	crID := vast.Ads[0].GetCreativeId()
+	crID := adapter.getCreativeId(vast.Ads[0])
 
 	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
 	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
@@ -270,6 +274,26 @@ func (adapter *WideOrbitAdapter) MakeBids(internalRequest *openrtb.BidRequest, e
 	})
 
 	return bidderResponse, nil
+}
+
+func (adapter *WideOrbitAdapter) getCreativeId(ad adapters.Ad) string {
+	crID := ad.GetCreativeId()
+	if crID != "" {
+		return crID
+	}
+
+	wrapper := ad.Wrapper
+	if wrapper == nil {
+		return ""
+	}
+	if len(wrapper.Extensions) > 0 && wrapper.Extensions[0].Name == "com.rubiconproject.data" {
+		var rubiExt RubiconExtension
+		err := xml.Unmarshal(wrapper.Extensions[0].Data, &rubiExt)
+		if err == nil {
+			return rubiExt.CreativeId
+		}
+	}
+	return ""
 }
 
 // Adding header fields to request header
