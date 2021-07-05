@@ -93,6 +93,7 @@ import (
 	"github.com/prebid/prebid-server/adapters/valueimpression"
 	"github.com/prebid/prebid-server/adapters/verizonmedia"
 	"github.com/prebid/prebid-server/adapters/visx"
+	"github.com/prebid/prebid-server/adapters/voxnest"
 	"github.com/prebid/prebid-server/adapters/vrtcal"
 	"github.com/prebid/prebid-server/adapters/wideorbit"
 	"github.com/prebid/prebid-server/adapters/yeahmobi"
@@ -207,5 +208,6 @@ func newAdapterBuilders() map[openrtb_ext.BidderName]adapters.Builder {
 		openrtb_ext.BidderDistrictM:        districtm.Builder,
 		openrtb_ext.BidderDax:              dax.Builder,
 		openrtb_ext.BidderBidSwitch:        bidswitch.Builder,
+		openrtb_ext.BidderVoxnest:          voxnest.Builder,
 	}
 }
