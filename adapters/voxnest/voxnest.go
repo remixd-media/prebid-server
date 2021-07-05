@@ -21,9 +21,7 @@ type VoxnestAdapter struct {
 
 func (adapter *VoxnestAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
 	numImps := len(request.Imp)
-
 	requests := []*adapters.RequestData{}
-
 	errors := []error{}
 
 	for i := 0; i < numImps; i++ {
@@ -41,7 +39,6 @@ func (adapter *VoxnestAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 
 		params := url.Values{}
 
-		//preroll
 		delay := "preroll"
 		if imp.Audio.StartDelay != nil {
 			if *imp.Audio.StartDelay > 0 || *imp.Audio.StartDelay == openrtb.StartDelayGenericMidRoll {
@@ -75,11 +72,6 @@ func (adapter *VoxnestAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			if len(request.Device.UA) > 0 {
 				headers.Add("User-Agent", request.Device.UA)
 			}
-
-			if len(request.Device.IPv6) > 0 {
-				headers.Add("X-Forwarded-For", request.Device.IPv6)
-			}
-
 			if len(request.Device.IP) > 0 {
 				headers.Add("X-Forwarded-For", request.Device.IP)
 			}
