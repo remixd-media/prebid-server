@@ -2,6 +2,7 @@ package usersyncers
 
 import (
 	"github.com/prebid/prebid-server/adapters/dax"
+	"github.com/prebid/prebid-server/adapters/voxnest"
 	"github.com/prebid/prebid-server/adapters/wideorbit"
 	"strings"
 	"text/template"
@@ -182,6 +183,7 @@ func NewSyncerMap(cfg *config.Configuration) map[openrtb_ext.BidderName]usersync
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderDax, dax.NewDaxSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderBidSwitch, bidswitch.NewBidSwitchSyncer)
 	insertIntoMap(cfg, syncers, openrtb_ext.BidderDistrictM, districtm.NewDistrictMSyncer)
+	insertIntoMap(cfg, syncers, openrtb_ext.BidderVoxnest, voxnest.NewVoxnestSyncer)
 	return syncers
 }
 

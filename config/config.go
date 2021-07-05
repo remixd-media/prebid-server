@@ -646,6 +646,7 @@ func (cfg *Configuration) setDerivedDefaults() {
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderDistrictM, "https://cdn.districtm.io/ids/?sellerid=101977")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderRubicon, "https://secure-assets.rubiconproject.com/utils/xapi/multi-sync.html?p=22106&endpoint=us-east")
 	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderTritonDigital, "http://playerservices.live.streamtheworld.com/api/getuuid?redir="+url.QueryEscape(externalURL)+"%2Fsetuid%3Fbidder%3Dtritondigital%26uid%3D@UUID@")
+	setDefaultUsersync(cfg.Adapters, openrtb_ext.BidderVoxnest, "https://voxnest-sync.example.com") // placeholder
 }
 
 func setDefaultUsersync(m map[string]Adapter, bidder openrtb_ext.BidderName, defaultValue string) {
@@ -905,6 +906,7 @@ func SetupViper(v *viper.Viper, filename string) {
 	v.SetDefault("adapters.bidswitch.endpoint", "https://{{.Host}}")
 	v.SetDefault("adapters.districtm.endpoint", "https://{{.Host}}")
 	v.SetDefault("adapters.tritondigital.endpoint", "https://{{.Host}}")
+	v.SetDefault("adapters.voxnest.endpoint", "https://{{.Host}}")
 
 	v.SetDefault("max_request_size", 1024*256)
 	v.SetDefault("analytics.file.filename", "")

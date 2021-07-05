@@ -97,6 +97,7 @@ func TestNewSyncerMap(t *testing.T) {
 			string(openrtb_ext.BidderWideOrbit):        syncConfig,
 			string(openrtb_ext.BidderBidSwitch):        syncConfig,
 			string(openrtb_ext.BidderDistrictM):        syncConfig,
+			string(openrtb_ext.BidderVoxnest):          syncConfig,
 		},
 	}
 

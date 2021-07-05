@@ -1,0 +1,105 @@
+{
+  "mockBidRequest": {
+    "id": "test-request-id",
+    "bcat": [
+      "IAB25",
+      "IAB7-39",
+      "IAB8-18"
+    ],
+    "user": {
+      "buyeruid": "user-101",
+      "yob": 1973
+    },
+    "device": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+      "ip": "1.2.3.4"
+    },
+    "imp": [
+      {
+        "id": "test-imp-id",
+        "bidfloor": 0.1,
+        "audio": {
+          "feed": 3,
+          "startdelay": 0,
+          "minduration": 5,
+          "maxduration": 30,
+          "maxextended": 30,
+          "minbitrate": 300,
+          "maxbitrate": 1500,
+          "api": [
+            1,
+            2
+          ],
+          "protocols": [
+            9,
+            10
+          ],
+          "mimes": [
+            "audio/aac",
+            "audio/mp4",
+            "audio/mpeg"
+          ],
+          "delivery": [
+            2
+          ],
+          "battr": [
+            13,
+            14
+          ]
+        },
+        "ext": {
+          "bidder": {
+            "placementId": "12345"
+          }
+        }
+      }
+    ],
+    "site": {
+      "page": "http://example.com/page-1",
+      "content": {
+        "id": "content_id",
+        "genre": "Design"
+      }
+    }
+  },
+  "httpCalls": [
+    {
+      "expectedRequest": {
+        "method": "GET",
+        "headers": {
+          "User-Agent": [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+          ],
+          "X-Forwarded-For": [
+            "1.2.3.4"
+          ],
+          "Pbs-Imp-Id": [
+            "test-imp-id"
+          ]
+        },
+        "uri": "https://mock.voxnest.com?ads_type=preroll&blocked_iab_categories=%5B%22IAB25%22%2C%22IAB7-39%22%2C%22IAB8-18%22%5D&content_categories=%5B%22Design%22%5D&content_episode_id=episode_id&content_show_id=content_id"
+      },
+      "mockResponse": {
+        "status": 200,
+        "body":"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><VAST version='4.0' xmlns='http://www.iab.com/VAST'><Ad sequence='1' id='AdswizzAd72745'><InLine><AdSystem>Adswizz</AdSystem><Impression id='72745'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/impression?H4sIAAAAAAAAAJ1VW4+iMBT+NfgykdCWCjzwoDOazMtms8Zn08tRm5HCQtWd/fV7CgLq7swmY0g99+/0Kz3oUy2cKW3OIvxNjqZxYKF+1TnRjEdU6ShNZ5TNIp4CzfhMplRJkmgYYvMgWQSUGo1LwOa4/i/VB9JnXJubpITLRGd0l2hB+AwU05KQGWNaEZZmQ4q2rkvZiWMDQfIyEZdttBW/bVip8mRd/Z4H3De0WftAjgH6RTiRO1HvwYGeVieJvR+gnhq7K7EUJSSNA7bQUJQBX0pzPBq7R4c3bOckRehWXJMoxbiEJjHH/+XmB65R6KmLUOpa4ktXCwWv2jepQfKU0WkkpJoSAmIqY5ZOI9xIFvFYAFWYsF5/D+jKXBGxkjI+m0bMy63IMhR/lxa2rYvELEIWFvVt0g7lsZvmXi3Ke91Wd+r+XlWoddtrdo9lvW+zfkFZPkDKB0z5CCofUOUDrBxx5SOwvEM2V3p1xIF9Si+23FGWJigL50XkfL6+p1zojtn+cP/m+mzgsn2Dd2/iSUxmBJeUE//mXK9R6yJJC3Tfvfsa+/KhjHRfJvS6c7You221QJ3IcR9ISaUOwvg9cIrEMoCEyCxW/m60LE00nI2C/sJXw931K57Grj0xvL1hNguRh5AwOlxc04zx5/J4KkDX5jzOgj2UV39bXRdiCE/xHvRh9WBVYjAqN1jBKmPLwVOpwZMRPLLBcRTXHBZjq1lvxSNsrfgypSGPSI8qroOKeFo7TDtU/lbW7vA0L6A2N001Y6uU8LFXOzbbjajOvO/3226/aHq1nWWMEI/rxxmOPP+0SaeRI2ObsrAGDatZyMN4KFw2N326pxXOSD045Se+sf2Dc1XTiit8LpdLiCN0SkNVFqg7aNx4PpUeednYN1te7Oizn8AVHzjvJrwVBVzHew2F+aX7Ee8javgZ7nVV564+wUSc9gVYnPevOOTzgHLPK6dUaF1D0wh5hFbHpf+YoPrc2hr9trQ+Qn8YciwVflT+WQQ7VjLHI8sylv0B4cq3t2EHAAA=]]></Impression><AdTitle><![CDATA[Forest_test]]></AdTitle><Advertiser></Advertiser><Creatives><Creative id='72745' sequence='1'><Linear><TrackingEvents><Tracking event='start'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/start?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='firstQuartile'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/first?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='midpoint'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/midpoint?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='thirdQuartile'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/third?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='complete'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/complete?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking></TrackingEvents><Duration>00:00:15</Duration><MediaFiles><MediaFile bitrate='256000' height='0' width='0' type='audio/mpeg' delivery='progressive'><![CDATA[http://delivery-cdn-cf.adswizz.com/demo/discovertheforest15_ad_8e034091-b075-48b8-ac0f-16d085c33f03.mp3]]></MediaFile><Mezzanine><![CDATA[http://delivery-cdn-cf.adswizz.com/demo/discovertheforest15_ad_8e034091-b075-48b8-ac0f-16d085c33f03.mp3]]></Mezzanine></MediaFiles></Linear><UniversalAdId idValue='unknown' idRegistry='unknown'/></Creative></Creatives><Description><![CDATA[Forest_test]]></Description></InLine></Ad></VAST>"
+      }
+    }
+  ],
+  "expectedBidResponses": [
+    {
+      "currency": "USD",
+      "bids": [
+        {
+          "bid": {
+            "crid": "72745",
+            "adm": "\"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><VAST version='4.0' xmlns='http://www.iab.com/VAST'><Ad sequence='1' id='AdswizzAd72745'><InLine><AdSystem>Adswizz</AdSystem><Impression id='72745'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/impression?H4sIAAAAAAAAAJ1VW4+iMBT+NfgykdCWCjzwoDOazMtms8Zn08tRm5HCQtWd/fV7CgLq7swmY0g99+/0Kz3oUy2cKW3OIvxNjqZxYKF+1TnRjEdU6ShNZ5TNIp4CzfhMplRJkmgYYvMgWQSUGo1LwOa4/i/VB9JnXJubpITLRGd0l2hB+AwU05KQGWNaEZZmQ4q2rkvZiWMDQfIyEZdttBW/bVip8mRd/Z4H3De0WftAjgH6RTiRO1HvwYGeVieJvR+gnhq7K7EUJSSNA7bQUJQBX0pzPBq7R4c3bOckRehWXJMoxbiEJjHH/+XmB65R6KmLUOpa4ktXCwWv2jepQfKU0WkkpJoSAmIqY5ZOI9xIFvFYAFWYsF5/D+jKXBGxkjI+m0bMy63IMhR/lxa2rYvELEIWFvVt0g7lsZvmXi3Ke91Wd+r+XlWoddtrdo9lvW+zfkFZPkDKB0z5CCofUOUDrBxx5SOwvEM2V3p1xIF9Si+23FGWJigL50XkfL6+p1zojtn+cP/m+mzgsn2Dd2/iSUxmBJeUE//mXK9R6yJJC3Tfvfsa+/KhjHRfJvS6c7You221QJ3IcR9ISaUOwvg9cIrEMoCEyCxW/m60LE00nI2C/sJXw931K57Grj0xvL1hNguRh5AwOlxc04zx5/J4KkDX5jzOgj2UV39bXRdiCE/xHvRh9WBVYjAqN1jBKmPLwVOpwZMRPLLBcRTXHBZjq1lvxSNsrfgypSGPSI8qroOKeFo7TDtU/lbW7vA0L6A2N001Y6uU8LFXOzbbjajOvO/3226/aHq1nWWMEI/rxxmOPP+0SaeRI2ObsrAGDatZyMN4KFw2N326pxXOSD045Se+sf2Dc1XTiit8LpdLiCN0SkNVFqg7aNx4PpUeednYN1te7Oizn8AVHzjvJrwVBVzHew2F+aX7Ee8javgZ7nVV564+wUSc9gVYnPevOOTzgHLPK6dUaF1D0wh5hFbHpf+YoPrc2hr9trQ+Qn8YciwVflT+WQQ7VjLHI8sylv0B4cq3t2EHAAA=]]></Impression><AdTitle><![CDATA[Forest_test]]></AdTitle><Advertiser></Advertiser><Creatives><Creative id='72745' sequence='1'><Linear><TrackingEvents><Tracking event='start'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/start?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='firstQuartile'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/first?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='midpoint'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/midpoint?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='thirdQuartile'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/third?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking><Tracking event='complete'><![CDATA[http://deliveryengine.demo.adswizz.com/vast/4.0/v1.1/quartile/complete?H4sIAAAAAAAAAJ1VS4/aMBD+NeGyIortOI8DB9gFaS9VVcQZ+TGAtcRJEwPd/vqOE5IA7W6lRZGZ9zf+HE/0qRbOlHbGIvxNjqZxYKF+1TOiGY+o0lGWJZQlEc+A5jyRGVWSpBqG2FmQLgJKjcYlYHNc/5fqA+kzrs1NUsplqnO6S7UgPAHFtCQkYUwrwrJ8SNHWdSk7cWwgSF8m4rKNtuK3DStVnqyr32cB9w1t1j6QY4B+EU7MnKj34EBPq5PE3g9QT43dlViKEpLFAVtoKMqAL6U5Ho3do8MbtnOSIXQrrkmUYVxK05jj/3LzA9co9NRFKHUt8aWrhYJX7ZvUIHnG6DQSUk0JATGVMcumEW4kj3gsgCpMWK+/B3RlrohYSRmfTSPm5VZkOYq/Swvb1kViFiELi/o2aYfy2E1zrxblvW6rO3V/ryrUuu01u8ey3rdZv6AsHyDlA6Z8BJUPqPIBVo648hFY3iGbK7064sA+pRdb7ijLUpSF8yJyPl/fUy50x2x/uH9zfTZw2b7BuzfxNCYJwSXjxL8512vUukjaAt13777GvnwoI92XCb3unC3KblstUCdy3AdSUqmDMH4PnCKxDCAlMo+VvxstSxMNZ6Ogv/DVcHf9iqexa08Mb2+YJyHyEBJGh4trmjH+XB5PBejanMdZsIfy6m+r60IM4Rnegz6sHqxKDEblBitYZWw5eCo1eHKCRzY4juKaw2JsNe+teIStFV+mLOQR6VHFdVART2uHaYfK38raHZ7mBdTmpqlmbJUSPvZqx2a7EdWZ9/1+2+0XTa+2s4wR4nH9OMOR55826TRyZGxTFtagYZWEPIyHwmVz06d7WuGM1INTfuIb2z84VzWtuMLncrmEOEKnNFRlgbqDxo3nU+mRl419s+XFjj77CVzxgfNuwltRwHW811CYX7of8T6ihp/hXlf1zNUnmIjTvgCL8/4Vh/wsoNzzyikVWtfQNEIeodVx6T8mqD63tka/La2P0B+GHEuFH5V/FsGOlZyRLCE0/QPIHXkyYAcAAA==]]></Tracking></TrackingEvents><Duration>00:00:15</Duration><MediaFiles><MediaFile bitrate='256000' height='0' width='0' type='audio/mpeg' delivery='progressive'><![CDATA[http://delivery-cdn-cf.adswizz.com/demo/discovertheforest15_ad_8e034091-b075-48b8-ac0f-16d085c33f03.mp3]]></MediaFile><Mezzanine><![CDATA[http://delivery-cdn-cf.adswizz.com/demo/discovertheforest15_ad_8e034091-b075-48b8-ac0f-16d085c33f03.mp3]]></Mezzanine></MediaFiles></Linear><UniversalAdId idValue='unknown' idRegistry='unknown'/></Creative></Creatives><Description><![CDATA[Forest_test]]></Description></InLine></Ad></VAST>\"",
+            "price": 0.1,
+            "id": "AdswizzAd72745",
+            "impid": ""
+          },
+          "type": "audio"
+        }
+      ]
+    }
+  ]
+}

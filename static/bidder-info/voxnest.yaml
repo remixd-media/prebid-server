@@ -1,0 +1,6 @@
+maintainer:
+  email: "adapters@remixd.com"
+capabilities:
+  site:
+    mediaTypes:
+      - audio

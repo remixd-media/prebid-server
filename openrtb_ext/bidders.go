@@ -141,6 +141,7 @@ const (
 	BidderDistrictM        BidderName = "districtm"
 	BidderWideOrbit        BidderName = "wideorbit"
 	BidderDax              BidderName = "dax"
+	BidderVoxnest          BidderName = "voxnest"
 )
 
 // CoreBidderNames returns a slice of all core bidders.
@@ -247,6 +248,7 @@ func CoreBidderNames() []BidderName {
 		BidderDistrictM,
 		BidderWideOrbit,
 		BidderDax,
+		BidderVoxnest,
 	}
 }
 
