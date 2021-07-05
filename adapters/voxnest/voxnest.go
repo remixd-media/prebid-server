@@ -125,6 +125,7 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpVoxnest, error) {
 }
 
 func (adapter *VoxnestAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+	fmt.Printf("voxnest makebids start (id: %v | status: %v)\n", internalRequest.ID, response.StatusCode)
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
@@ -171,13 +172,6 @@ func (adapter *VoxnestAdapter) MakeBids(internalRequest *openrtb.BidRequest, ext
 	})
 
 	return bidderResponse, nil
-}
-
-// Adding header fields to request header
-func addHeaderIfNonEmpty(headers http.Header, headerName string, headerValue string) {
-	if len(headerValue) > 0 {
-		headers.Add(headerName, headerValue)
-	}
 }
 
 func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters.Bidder, error) {
