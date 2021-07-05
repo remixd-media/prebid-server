@@ -56,8 +56,9 @@ func (adapter *VoxnestAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 		if imp.Audio.Feed == openrtb.FeedTypePodcast &&
 			request.Site != nil && request.Site.Content != nil && len(request.Site.Content.ID) > 0 {
 			params.Add("content_show_id", request.Site.Content.ID)
+		} else if request.Site != nil {
+			params.Add("content_show_id", request.Site.Domain)
 		} else {
-			//todo
 			params.Add("content_show_id", "show_id")
 		}
 
@@ -87,7 +88,7 @@ func (adapter *VoxnestAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 		// set imp id to be able to match it against bid
 		headers.Set("PBS-IMP-ID", imp.ID)
 
-		reqURL := adapter.endpoint + "&" + params.Encode()
+		reqURL := adapter.endpoint + "?" + params.Encode()
 
 		pubId := ""
 		if request.Site != nil && request.Site.Publisher != nil {

@@ -77,7 +77,7 @@
             "test-imp-id"
           ]
         },
-        "uri": "https://mock.voxnest.com?pbId=123&ads_type=preroll&blocked_iab_categories=%5B%22IAB25%22%2C%22IAB7-39%22%2C%22IAB8-18%22%5D&content_categories=%5B%22Design%22%5D&content_episode_id=episode_id&content_show_id=content_id"
+        "uri": "https://mock.voxnest.com?ads_type=preroll&blocked_iab_categories=%5B%22IAB25%22%2C%22IAB7-39%22%2C%22IAB8-18%22%5D&content_categories=%5B%22Design%22%5D&content_episode_id=episode_id&content_show_id=content_id"
       },
       "mockResponse": {
         "status": 200,
