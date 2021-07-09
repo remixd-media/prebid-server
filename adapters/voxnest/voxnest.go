@@ -108,6 +108,9 @@ func (adapter *VoxnestAdapter) getShowAndEpisodeId(request *openrtb.BidRequest, 
 	u, err := url.Parse(request.Site.Page)
 	if err == nil {
 		showId, episodeId = u.Host, u.Path
+		if episodeId == "" {
+			episodeId = "/"
+		}
 		entirePage = u.Host + u.Path
 	} else {
 		showId = entirePage
