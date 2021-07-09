@@ -43,6 +43,10 @@ func (adapter *ColossusAdapter) MakeRequests(request *openrtb.BidRequest, reqInf
 			errors = append(errors, err)
 			continue
 		}
+		if ext.PlacementId == "" {
+			errors = append(errors, &errortypes.BadInput{Message: fmt.Sprintf("no placement id")})
+			continue
+		}
 
 		params := url.Values{}
 		params.Add("dnt", "0")
@@ -111,7 +115,6 @@ func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpColossus, error) {
 // MakeBids makes the bids
 func (adapter *ColossusAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
 	fmt.Printf("colossus makebids start (id: %v | status: %v)\n", internalRequest.ID, response.StatusCode)
-	var errs []error
 
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
