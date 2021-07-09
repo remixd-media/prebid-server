@@ -3,9 +3,7 @@ maintainer:
 capabilities:
   app:
     mediaTypes:
-      - banner
-      - video
+      - audio
   site:
     mediaTypes:
-      - banner
-      - video
+      - audio

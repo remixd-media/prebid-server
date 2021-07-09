@@ -1,11 +1,14 @@
 package colossus
 
 import (
+	"bytes"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strings"
 
-	"github.com/buger/jsonparser"
 	"github.com/mxmCherry/openrtb"
 	"github.com/prebid/prebid-server/adapters"
 	"github.com/prebid/prebid-server/config"
@@ -26,114 +29,151 @@ func Builder(bidderName openrtb_ext.BidderName, config config.Adapter) (adapters
 }
 
 // MakeRequests create bid request for colossus demand
-func (a *ColossusAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
-	var errs []error
-	var err error
-	var tagID string
+func (adapter *ColossusAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo *adapters.ExtraRequestInfo) ([]*adapters.RequestData, []error) {
+	var errors []error
+	var requests []*adapters.RequestData
 
-	var adapterRequests []*adapters.RequestData
-
-	reqCopy := *request
 	for _, imp := range request.Imp {
-		reqCopy.Imp = []openrtb.Imp{imp}
-
-		tagID, err = jsonparser.GetString(reqCopy.Imp[0].Ext, "bidder", "TagID")
-		if err != nil {
-			errs = append(errs, err)
+		if imp.Audio == nil {
 			continue
 		}
 
-		reqCopy.Imp[0].TagID = tagID
-
-		adapterReq, errors := a.makeRequest(&reqCopy)
-		if adapterReq != nil {
-			adapterRequests = append(adapterRequests, adapterReq)
+		ext, err := parseExt(&imp)
+		if err != nil {
+			errors = append(errors, err)
+			continue
 		}
-		errs = append(errs, errors...)
+
+		params := url.Values{}
+		params.Add("dnt", "0")
+		params.Add("placementId", ext.PlacementId)
+		if request.Site != nil {
+			params.Add("domain", request.Site.Domain)
+			params.Add("page", request.Site.Page)
+		}
+		params.Add("bidfloor", fmt.Sprintf("%v", imp.BidFloor))
+		if request.Device != nil {
+			if len(request.Device.IP) > 0 {
+				params.Add("ip", request.Device.IP)
+			}
+			if len(request.Device.UA) > 0 {
+				params.Add("ua", request.Device.UA)
+			}
+		}
+
+		headers := http.Header{}
+		// set imp id to be able to match it against bid
+		headers.Set("PBS-IMP-ID", imp.ID)
+
+		reqURL := adapter.URI + "&" + params.Encode()
+
+		pubId := ""
+		if request.Site != nil && request.Site.Publisher != nil {
+			pubId = request.Site.Publisher.ID
+		}
+
+		fmt.Printf("colossus makerequests reqUrl: %s pubId=%s headers=%s\n", reqURL, pubId, headersToString(headers))
+		reqData := adapters.RequestData{
+			Method:  http.MethodGet,
+			Uri:     reqURL,
+			Headers: headers,
+		}
+
+		requests = append(requests, &reqData)
 	}
-	return adapterRequests, errs
+	if len(errors) != 0 {
+		return nil, errors
+	}
+
+	return requests, nil
 }
 
-func (a *ColossusAdapter) makeRequest(request *openrtb.BidRequest) (*adapters.RequestData, []error) {
+func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpColossus, error) {
+	var bidderExt adapters.ExtImpBidder
 
-	var errs []error
-
-	reqJSON, err := json.Marshal(request)
-
-	if err != nil {
-		errs = append(errs, err)
-		return nil, errs
+	if err := json.Unmarshal(imp.Ext, &bidderExt); err != nil {
+		return nil, &errortypes.BadInput{
+			Message: fmt.Sprintf("Ignoring imp id=%s, error while decoding extImpBidder, err: %s", imp.ID, err),
+		}
 	}
 
-	headers := http.Header{}
-	headers.Add("Content-Type", "application/json;charset=utf-8")
-	headers.Add("Accept", "application/json")
-	return &adapters.RequestData{
-		Method:  "POST",
-		Uri:     a.URI,
-		Body:    reqJSON,
-		Headers: headers,
-	}, errs
+	impExt := openrtb_ext.ExtImpColossus{}
+	err := json.Unmarshal(bidderExt.Bidder, &impExt)
+	if err != nil {
+		return nil, &errortypes.BadInput{
+			Message: fmt.Sprintf("Ignoring imp id=%s, error while decoding impExt, err: %s", imp.ID, err),
+		}
+	}
+
+	return &impExt, nil
 }
 
 // MakeBids makes the bids
-func (a *ColossusAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+func (adapter *ColossusAdapter) MakeBids(internalRequest *openrtb.BidRequest, externalRequest *adapters.RequestData, response *adapters.ResponseData) (*adapters.BidderResponse, []error) {
+	fmt.Printf("colossus makebids start (id: %v | status: %v)\n", internalRequest.ID, response.StatusCode)
 	var errs []error
 
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
 
-	if response.StatusCode == http.StatusNotFound {
-		return nil, []error{&errortypes.BadServerResponse{
-			Message: fmt.Sprintf("Unexpected status code: %d. Run with request.debug = 1 for more info", response.StatusCode),
+	if response.StatusCode == http.StatusBadRequest {
+		return nil, []error{&errortypes.BadInput{
+			Message: fmt.Sprintf("Bad user input: HTTP status %d", response.StatusCode),
 		}}
 	}
 
 	if response.StatusCode != http.StatusOK {
 		return nil, []error{&errortypes.BadServerResponse{
-			Message: fmt.Sprintf("Unexpected status code: %d. Run with request.debug = 1 for more info", response.StatusCode),
+			Message: fmt.Sprintf("Bad server response: HTTP status %d", response.StatusCode),
 		}}
 	}
 
-	var bidResp openrtb.BidResponse
+	fmt.Printf("colossus makeBids response body (id: %v): %q\n", internalRequest.ID, string(response.Body))
 
-	if err := json.Unmarshal(response.Body, &bidResp); err != nil {
+	var vast adapters.VAST
+	err := xml.Unmarshal(response.Body, &vast)
+	if err != nil {
 		return nil, []error{err}
 	}
 
-	bidResponse := adapters.NewBidderResponseWithBidsCapacity(1)
-
-	for _, sb := range bidResp.SeatBid {
-		for i := range sb.Bid {
-			bidType, err := getMediaTypeForImp(sb.Bid[i].ImpID, internalRequest.Imp)
-			if err != nil {
-				errs = append(errs, err)
-			} else {
-				b := &adapters.TypedBid{
-					Bid:     &sb.Bid[i],
-					BidType: bidType,
-				}
-				bidResponse.Bids = append(bidResponse.Bids, b)
-			}
-		}
+	if len(vast.Ads) == 0 {
+		return nil, []error{&errortypes.BadServerResponse{
+			Message: fmt.Sprintf("No Ads in VAST response"),
+		}}
 	}
-	return bidResponse, errs
+
+	price, err := vast.Ads[0].GetPricing()
+	if err != nil {
+		return nil, []error{&errortypes.BadServerResponse{
+			Message: fmt.Sprintf("Couldn't parse CPM"),
+		}}
+	}
+	if price == 0 {
+		price = internalRequest.Imp[0].BidFloor
+	}
+
+	crID := vast.Ads[0].GetCreativeId()
+
+	bidderResponse := adapters.NewBidderResponseWithBidsCapacity(1)
+	bidderResponse.Bids = append(bidderResponse.Bids, &adapters.TypedBid{
+		Bid: &openrtb.Bid{
+			ID:    vast.Ads[0].ID,
+			ImpID: externalRequest.Headers.Get("PBS-IMP-ID"),
+			Price: price,
+			AdM:   string(response.Body),
+			CrID:  crID,
+		},
+		BidType: openrtb_ext.BidTypeAudio,
+	})
+
+	return bidderResponse, nil
 }
 
-func getMediaTypeForImp(impID string, imps []openrtb.Imp) (openrtb_ext.BidType, error) {
-	mediaType := openrtb_ext.BidTypeBanner
-	for _, imp := range imps {
-		if imp.ID == impID {
-			if imp.Banner == nil && imp.Video != nil {
-				mediaType = openrtb_ext.BidTypeVideo
-			}
-			return mediaType, nil
-		}
+func headersToString(m map[string][]string) string {
+	b := new(bytes.Buffer)
+	for key, value := range m {
+		fmt.Fprintf(b, "%s=%s", key, strings.Join(value, ","))
 	}
-
-	// This shouldnt happen. Lets handle it just incase by returning an error.
-	return "", &errortypes.BadInput{
-		Message: fmt.Sprintf("Failed to find impression \"%s\" ", impID),
-	}
+	return b.String()
 }

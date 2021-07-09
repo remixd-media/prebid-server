@@ -5,10 +5,11 @@
 
     "type": "object",
     "properties": {
-      "TagID": {
+      "placementId": {
         "type": "string",
+        "minLength": 1,
         "description": "An ID which identifies the colossus ad tag"
       }
     },
-    "required" : [ "TagID" ]
+    "required" : [ "placementId" ]
   }
