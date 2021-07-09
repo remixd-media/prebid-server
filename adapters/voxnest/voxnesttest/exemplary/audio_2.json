@@ -19,7 +19,6 @@
         "id": "test-imp-id",
         "bidfloor": 0.1,
         "audio": {
-          "feed": 3,
           "startdelay": 0,
           "minduration": 5,
           "maxduration": 30,
@@ -77,7 +76,7 @@
             "test-imp-id"
           ]
         },
-        "uri": "https://mock.voxnest.com?ads_type=preroll&blocked_iab_categories=%5B%22IAB25%22%2C%22IAB7-39%22%2C%22IAB8-18%22%5D&content_categories=%5B%22Design%22%5D&content_episode_id=example.com%2Fpage-1&content_show_id=content_id"
+        "uri": "https://mock.voxnest.com?ads_type=preroll&blocked_iab_categories=%5B%22IAB25%22%2C%22IAB7-39%22%2C%22IAB8-18%22%5D&content_categories=%5B%22Design%22%5D&content_episode_id=%2Fpage-1&content_show_id=example.com"
       },
       "mockResponse": {
         "status": 200,
