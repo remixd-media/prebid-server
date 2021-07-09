@@ -48,16 +48,10 @@ func (adapter *VoxnestAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 			}
 		}
 		params.Add("ads_type", delay)
-		params.Add("content_episode_id", "episode_id")
 
-		if imp.Audio.Feed == openrtb.FeedTypePodcast &&
-			request.Site != nil && request.Site.Content != nil && len(request.Site.Content.ID) > 0 {
-			params.Add("content_show_id", request.Site.Content.ID)
-		} else if request.Site != nil {
-			params.Add("content_show_id", request.Site.Domain)
-		} else {
-			params.Add("content_show_id", "show_id")
-		}
+		showId, episodeId := adapter.getShowAndEpisodeId(request, imp)
+		params.Add("content_show_id", showId)
+		params.Add("content_episode_id", episodeId)
 
 		var contentGenres []string
 		if request.Site != nil && request.Site.Content != nil {
@@ -102,6 +96,28 @@ func (adapter *VoxnestAdapter) MakeRequests(request *openrtb.BidRequest, reqInfo
 	}
 
 	return requests, nil
+}
+
+func (adapter *VoxnestAdapter) getShowAndEpisodeId(request *openrtb.BidRequest, imp openrtb.Imp) (string, string) {
+	showId, episodeId := "remixd.com", "episode_id"
+	if request.Site == nil {
+		return showId, episodeId
+	}
+
+	entirePage := request.Site.Page
+	u, err := url.Parse(request.Site.Page)
+	if err == nil {
+		showId, episodeId = u.Host, u.Path
+		entirePage = u.Host + u.Path
+	} else {
+		showId = entirePage
+	}
+
+	if imp.Audio.Feed == openrtb.FeedTypePodcast && request.Site.Content != nil && len(request.Site.Content.ID) > 0 {
+		return request.Site.Content.ID, entirePage
+	}
+
+	return showId, episodeId
 }
 
 func parseExt(imp *openrtb.Imp) (*openrtb_ext.ExtImpVoxnest, error) {
